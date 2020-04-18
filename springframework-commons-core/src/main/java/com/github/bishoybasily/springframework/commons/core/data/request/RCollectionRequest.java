@@ -1,9 +1,9 @@
-package com.github.bishoybasily.springframework.commons.jpa.data.request;
+package com.github.bishoybasily.springframework.commons.core.data.request;
 
-import com.github.bishoybasily.springframework.commons.jpa.data.function.RAll;
-import com.github.bishoybasily.springframework.commons.jpa.data.function.RAllPage;
-import com.github.bishoybasily.springframework.commons.jpa.data.function.RAllSort;
-import com.github.bishoybasily.springframework.commons.jpa.data.params.Params;
+import com.github.bishoybasily.springframework.commons.core.data.function.RAll;
+import com.github.bishoybasily.springframework.commons.core.data.function.RAllPage;
+import com.github.bishoybasily.springframework.commons.core.data.function.RAllSort;
+import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.util.ObjectUtils;

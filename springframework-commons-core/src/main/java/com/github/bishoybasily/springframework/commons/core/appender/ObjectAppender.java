@@ -1,4 +1,4 @@
-package com.github.bishoybasily.springframework.commons.jpa.appender;
+package com.github.bishoybasily.springframework.commons.core.appender;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;
@@ -24,16 +24,16 @@ public class ObjectAppender<T> {
 
     public T build() {
 
-        T first = null;
+        T result = null;
         for (T next : list) {
-            if (ObjectUtils.isEmpty(first)) {
-                first = next;
+            if (ObjectUtils.isEmpty(result)) {
+                result = next;
             } else {
-                first = appender.append(first, next);
+                result = appender.append(result, next);
             }
         }
 
-        return first;
+        return result;
     }
 
 }

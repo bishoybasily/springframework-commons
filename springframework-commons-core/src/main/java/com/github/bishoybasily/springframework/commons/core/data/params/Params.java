@@ -1,6 +1,5 @@
-package com.github.bishoybasily.springframework.commons.jpa.data.params;
+package com.github.bishoybasily.springframework.commons.core.data.params;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,18 +29,6 @@ public class Params {
         return new Params();
     }
 
-    public Params setSort(String... ss) {
-        sort.clear();
-        sort.addAll(ImmutableList.copyOf(ss));
-        return this;
-    }
-
-    public Params setDirection(String... ds) {
-        direction.clear();
-        direction.addAll(ImmutableList.copyOf(ds));
-        return this;
-    }
-
     public boolean isPaginationPresented() {
         return !ObjectUtils.isEmpty(page) && !ObjectUtils.isEmpty(count);
     }
@@ -57,7 +44,13 @@ public class Params {
     }
 
     public Sort sort() {
-        return Sort.by(Streams.zip(sort.stream(), direction.stream(), (prop, dir) -> new Sort.Order(Sort.Direction.fromString(dir), prop)).collect(Collectors.toList()));
+        return Sort.by(
+                Streams.zip(
+                        sort.stream(),
+                        direction.stream(),
+                        (prop, dir) -> new Sort.Order(Sort.Direction.fromString(dir), prop)
+                ).collect(Collectors.toList())
+        );
     }
 
 }

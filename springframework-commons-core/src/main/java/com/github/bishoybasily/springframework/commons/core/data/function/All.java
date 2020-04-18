@@ -1,4 +1,4 @@
-package com.github.bishoybasily.springframework.commons.jpa.data.function;
+package com.github.bishoybasily.springframework.commons.core.data.function;
 
 /**
  * @author bishoybasily

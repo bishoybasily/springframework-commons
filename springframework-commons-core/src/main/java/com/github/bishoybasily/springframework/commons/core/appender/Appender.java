@@ -1,4 +1,4 @@
-package com.github.bishoybasily.springframework.commons.jpa.appender;
+package com.github.bishoybasily.springframework.commons.core.appender;
 
 /**
  * @author bishoybasily

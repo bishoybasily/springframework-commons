@@ -1,9 +1,9 @@
-package com.github.bishoybasily.springframework.commons.jpa.data.request;
+package com.github.bishoybasily.springframework.commons.core.data.request;
 
-import com.github.bishoybasily.springframework.commons.jpa.data.function.All;
-import com.github.bishoybasily.springframework.commons.jpa.data.function.AllPage;
-import com.github.bishoybasily.springframework.commons.jpa.data.function.AllSort;
-import com.github.bishoybasily.springframework.commons.jpa.data.params.Params;
+import com.github.bishoybasily.springframework.commons.core.data.function.All;
+import com.github.bishoybasily.springframework.commons.core.data.function.AllPage;
+import com.github.bishoybasily.springframework.commons.core.data.function.AllSort;
+import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -46,16 +46,16 @@ public class CollectionRequest<T> {
         }
     }
 
-    public <R1> RCollectionRequest<T, R1> r(Supplier<R1> r1Supplier) {
+    public <R> RCollectionRequest<T, R> r(Supplier<R> r1Supplier) {
 
-        RCollectionRequest<T, R1> rCollectionRequest = new RCollectionRequest<>(params, r1Supplier);
+        RCollectionRequest<T, R> rRequest = new RCollectionRequest<>(params, r1Supplier);
 
-        rCollectionRequest
+        rRequest
                 .setAll(all)
                 .setAllSort(allSort)
                 .setAllPage(allPage);
 
-        return rCollectionRequest;
+        return rRequest;
     }
 
 }
