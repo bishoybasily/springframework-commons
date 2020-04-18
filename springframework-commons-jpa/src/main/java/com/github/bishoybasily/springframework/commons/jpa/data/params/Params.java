@@ -26,6 +26,10 @@ public class Params {
     private List<String> sort = new ArrayList<>();
     private List<String> direction = new ArrayList<>();
 
+    public static Params empty() {
+        return new Params();
+    }
+
     public Params setSort(String... ss) {
         sort.clear();
         sort.addAll(ImmutableList.copyOf(ss));
@@ -36,10 +40,6 @@ public class Params {
         direction.clear();
         direction.addAll(ImmutableList.copyOf(ds));
         return this;
-    }
-
-    public static Params empty() {
-        return new Params();
     }
 
     public boolean isPaginationPresented() {

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.function.Supplier;
+
 /**
  * @author bishoybasily
  * @since 3/15/20
