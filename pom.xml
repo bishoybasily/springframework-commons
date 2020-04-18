@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <modules>
-        <module>core</module>
-        <module>jpa</module>
+        <module>springframework-commons-core</module>
+        <module>springframework-commons-jpa</module>
     </modules>
 
     <groupId>com.github.bishoybasily</groupId>
