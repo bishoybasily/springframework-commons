@@ -1,4 +1,4 @@
-package com.github.bishoybasily.commons.spring.jpa.appender;
+package com.github.bishoybasily.springframework.commons.jpa.appender;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ObjectUtils;

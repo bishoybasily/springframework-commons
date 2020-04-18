@@ -1,4 +1,4 @@
-package com.github.bishoybasily.commons.spring.jpa.generator;
+package com.github.bishoybasily.springframework.commons.jpa.generator;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

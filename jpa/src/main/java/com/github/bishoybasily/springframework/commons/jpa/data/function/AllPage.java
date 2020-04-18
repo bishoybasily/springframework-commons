@@ -1,4 +1,4 @@
-package com.github.bishoybasily.commons.spring.jpa.data.function;
+package com.github.bishoybasily.springframework.commons.jpa.data.function;
 
 import org.springframework.data.domain.Pageable;
 

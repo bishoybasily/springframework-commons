@@ -1,7 +1,7 @@
-package com.github.bishoybasily.commons.spring.jpa.service;
+package com.github.bishoybasily.springframework.commons.jpa.service;
 
-import com.github.bishoybasily.commons.spring.jpa.data.params.Params;
-import com.github.bishoybasily.commons.spring.jpa.data.request.CollectionRequest;
+import com.github.bishoybasily.springframework.commons.jpa.data.params.Params;
+import com.github.bishoybasily.springframework.commons.jpa.data.request.CollectionRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

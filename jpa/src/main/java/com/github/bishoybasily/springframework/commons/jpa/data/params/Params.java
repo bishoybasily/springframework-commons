@@ -1,4 +1,4 @@
-package com.github.bishoybasily.commons.spring.jpa.data.params;
+package com.github.bishoybasily.springframework.commons.jpa.data.params;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;

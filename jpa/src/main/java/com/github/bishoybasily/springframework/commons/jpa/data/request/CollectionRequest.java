@@ -1,9 +1,9 @@
-package com.github.bishoybasily.commons.spring.jpa.data.request;
+package com.github.bishoybasily.springframework.commons.jpa.data.request;
 
-import com.github.bishoybasily.commons.spring.jpa.data.function.All;
-import com.github.bishoybasily.commons.spring.jpa.data.function.AllPage;
-import com.github.bishoybasily.commons.spring.jpa.data.function.AllSort;
-import com.github.bishoybasily.commons.spring.jpa.data.params.Params;
+import com.github.bishoybasily.springframework.commons.jpa.data.function.All;
+import com.github.bishoybasily.springframework.commons.jpa.data.function.AllPage;
+import com.github.bishoybasily.springframework.commons.jpa.data.function.AllSort;
+import com.github.bishoybasily.springframework.commons.jpa.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
