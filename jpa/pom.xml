@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jpa</artifactId>
+    <artifactId>springframework-commons-jpa</artifactId>
     <packaging>jar</packaging>
     <name>springframework-commons :: jpa</name>
 
