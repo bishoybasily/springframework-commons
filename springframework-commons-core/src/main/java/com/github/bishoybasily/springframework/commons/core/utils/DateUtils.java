@@ -41,6 +41,15 @@ public class DateUtils {
         return new Date();
     }
 
+    public static Date from(int dayOfMonth, int month, int year, TimeZone timeZone) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(timeZone);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        return calendar.getTime();
+    }
+
     public static String formatted(String format, TimeZone timeZone) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         dateFormat.setTimeZone(timeZone);
