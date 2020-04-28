@@ -49,13 +49,13 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
     default Flux<E> all(P p) {
         return Mono.fromCallable(() -> {
             return new CollectionRequest<E>(p)
-                    .setAll(getJpaRepository()::findAll)
-                    .setAllSort(getJpaRepository()::findAll)
-                    .setAllPage(getJpaRepository()::findAll)
+                    .setAll(() -> getJpaRepository().findAll())
+                    .setAllSort(sort -> getJpaRepository().findAll(sort))
+                    .setAllPage(pageable -> getJpaRepository().findAll(pageable))
                     .r(() -> getSpecification(p))
-                    .setRAll(getJpaSpecificationExecutor()::findAll)
-                    .setRAllSort(getJpaSpecificationExecutor()::findAll)
-                    .setRAllPage(getJpaSpecificationExecutor()::findAll)
+                    .setRAll(spec -> getJpaSpecificationExecutor().findAll(spec))
+                    .setRAllSort((spec, sort) -> getJpaSpecificationExecutor().findAll(spec, sort))
+                    .setRAllPage((spec, pageable) -> getJpaSpecificationExecutor().findAll(spec, pageable))
                     .find();
         }).flatMapIterable(it -> it);
     }
