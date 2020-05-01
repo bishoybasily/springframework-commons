@@ -1,6 +1,7 @@
 package com.github.bishoybasily.springframework.commons.core.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,6 +23,11 @@ public class JsonUtils {
 
     @SneakyThrows
     public static <T> T json(String json, Class<T> type) {
+        return MAPPER.readValue(json, type);
+    }
+
+    @SneakyThrows
+    public static <T> T json(String json, TypeReference<T> type) {
         return MAPPER.readValue(json, type);
     }
 
