@@ -7,6 +7,7 @@
     <modules>
         <module>springframework-commons-core</module>
         <module>springframework-commons-jpa</module>
+        <module>springframework-commons-amqp</module>
     </modules>
 
     <groupId>com.github.bishoybasily</groupId>
@@ -41,6 +42,7 @@
         <guava.version>28.0-jre</guava.version>
         <lombok.version>1.18.12</lombok.version>
         <spring-data.version>2.2.6.RELEASE</spring-data.version>
+        <spring-amqp.version>2.2.5.RELEASE</spring-amqp.version>
         <jackson.version>2.10.3</jackson.version>
     </properties>
 
@@ -167,6 +169,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-rabbit</artifactId>
+                <version>${spring-amqp.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-commons</artifactId>
                 <version>${spring-data.version}</version>
@@ -202,12 +210,12 @@
             <dependency>
                 <groupId>com.github.bishoybasily</groupId>
                 <artifactId>springframework-commons-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.bishoybasily</groupId>
                 <artifactId>springframework-commons-jpa</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
         </dependencies>
