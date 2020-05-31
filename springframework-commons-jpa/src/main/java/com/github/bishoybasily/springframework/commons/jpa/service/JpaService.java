@@ -16,9 +16,9 @@ import java.util.function.Supplier;
  * The base interface for any jpa based service class,
  * Responsible for handling the basic create, delete and filtered read operations genetically
  * and exposing a reactive interface for these operations,
- * {@link #getJpaRepository()} must be implemented to provide a @{@link JpaRepository} implementation,
+ * {@link JpaService#getJpaRepository()} must be implemented to provide a {@link JpaRepository} implementation,
  * If there is a "find all" filtration criteria needs to be handled,
- * both {@link #getJpaSpecificationExecutor()} and {@link #getSpecification(P)},
+ * both {@link JpaService#getJpaSpecificationExecutor()} and {@link JpaService#getSpecification(P)},
  * must be implemented.
  *
  * @author bishoybasily
@@ -28,7 +28,7 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
 
     /**
      * Fetches single entity by id, and wraps it in a reactive @{@link Mono} wrapper,
-     * if no entity found, the exception supplied by {@link #supplyNotFoundException(I)} will be thrown
+     * if no entity found, the exception supplied by {@link JpaService#supplyNotFoundException(I)} will be thrown
      *
      * @param i the id to find the entity
      * @return the found entity
@@ -124,7 +124,7 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
 
     /**
      * @return a @{@link JpaSpecificationExecutor} implementation for the specified entity
-     * which is ideally the same instance that will be returned from {@link #getJpaRepository()} after extending @{@link JpaSpecificationExecutor}
+     * which is ideally the same instance that will be returned from {@link JpaService#getJpaRepository()} after extending @{@link JpaSpecificationExecutor}
      */
     default JpaSpecificationExecutor<E> getJpaSpecificationExecutor() {
         return null;

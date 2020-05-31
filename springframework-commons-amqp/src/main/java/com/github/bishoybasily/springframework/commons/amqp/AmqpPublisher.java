@@ -1,6 +1,7 @@
 package com.github.bishoybasily.springframework.commons.amqp;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import reactor.core.publisher.Mono;
 
 /**
@@ -17,5 +18,12 @@ public interface AmqpPublisher {
             return t;
         });
     }
+
+    default <T, S> Mono<S> publishAndReceive(String exchange, String routingKey, T t, ParameterizedTypeReference<S> reference) {
+        return Mono.fromCallable(() -> {
+            return getRabbitTemplate().convertSendAndReceiveAsType(exchange, routingKey, t, reference);
+        });
+    }
+
 
 }
