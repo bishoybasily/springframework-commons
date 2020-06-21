@@ -13,7 +13,7 @@
 
     <groupId>com.github.bishoybasily</groupId>
     <artifactId>springframework-commons</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>springframework-commons</name>
     <url>https://github.com/bishoybasily/springframework-commons</url>
