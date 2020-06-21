@@ -1,6 +1,7 @@
 package com.github.bishoybasily.springframework.commons.core.data.function;
 
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Flux;
 
 /**
  * @author bishoybasily
@@ -9,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 @FunctionalInterface
 public interface RAllPage<T, R> {
 
-    Iterable<T> findAll(R r, Pageable pageable);
+    Flux<T> findAll(R r, Pageable pageable);
 
 }

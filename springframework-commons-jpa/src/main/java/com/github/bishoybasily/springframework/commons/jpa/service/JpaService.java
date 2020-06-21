@@ -2,6 +2,7 @@ package com.github.bishoybasily.springframework.commons.jpa.service;
 
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
+import com.github.bishoybasily.springframework.commons.core.utils.ReactiveUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -47,17 +48,15 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
      * @return the matched records
      */
     default Flux<E> all(P p) {
-        return Mono.fromCallable(() -> {
-            return new CollectionRequest<E>(p)
-                    .setAll(() -> getJpaRepository().findAll())
-                    .setAllSort(sort -> getJpaRepository().findAll(sort))
-                    .setAllPage(pageable -> getJpaRepository().findAll(pageable))
-                    .r(() -> getSpecification(p))
-                    .setRAll(spec -> getJpaSpecificationExecutor().findAll(spec))
-                    .setRAllSort((spec, sort) -> getJpaSpecificationExecutor().findAll(spec, sort))
-                    .setRAllPage((spec, pageable) -> getJpaSpecificationExecutor().findAll(spec, pageable))
-                    .find();
-        }).flatMapIterable(it -> it);
+        return new CollectionRequest<E>(p)
+                .setAll(() -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll()))
+                .setAllSort(sort -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(sort)))
+                .setAllPage(pageable -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(pageable)))
+                .r(() -> getSpecification(p))
+                .setRAll(spec -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec)))
+                .setRAllSort((spec, sort) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, sort)))
+                .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)))
+                .find();
     }
 
     /**

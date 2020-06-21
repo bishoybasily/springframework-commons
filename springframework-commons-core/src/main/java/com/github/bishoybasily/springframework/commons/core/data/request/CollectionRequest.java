@@ -6,6 +6,7 @@ import com.github.bishoybasily.springframework.commons.core.data.function.AllSor
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import reactor.core.publisher.Flux;
 
 import java.util.function.Supplier;
 
@@ -33,7 +34,7 @@ public class CollectionRequest<T> {
         this.params = params;
     }
 
-    public Iterable<T> find() {
+    public Flux<T> find() {
 
         if (params.isPaginationPresented()) {
             return allPage.findAll(params.pageable());

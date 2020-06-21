@@ -1,6 +1,7 @@
 package com.github.bishoybasily.springframework.commons.core.data.function;
 
 import org.springframework.data.domain.Sort;
+import reactor.core.publisher.Flux;
 
 /**
  * @author bishoybasily
@@ -9,6 +10,6 @@ import org.springframework.data.domain.Sort;
 @FunctionalInterface
 public interface AllSort<T> {
 
-    Iterable<T> findAll(Sort sort);
+    Flux<T> findAll(Sort sort);
 
 }

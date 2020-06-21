@@ -7,6 +7,7 @@ import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.util.ObjectUtils;
+import reactor.core.publisher.Flux;
 
 import java.util.function.Supplier;
 
@@ -36,7 +37,7 @@ public class RCollectionRequest<T, R> extends CollectionRequest<T> {
     }
 
     @Override
-    public Iterable<T> find() {
+    public Flux<T> find() {
 
         R r = rSupplier.get();
 
