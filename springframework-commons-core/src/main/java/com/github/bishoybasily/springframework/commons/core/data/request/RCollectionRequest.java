@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import java.util.function.Supplier;
 
 /**
+ *
  * @author bishoybasily
  * @since 3/15/20
  */
@@ -36,6 +37,15 @@ public class RCollectionRequest<T, R> extends CollectionRequest<T> {
         this.rSupplier = rSupplier;
     }
 
+    /**
+     * It uses the same approach that {@link CollectionRequest#find()} uses but with a new restriction,
+     * The new restriction is a generic object that can be supplied through this {@link #rSupplier},
+     * If the supplier doesn't return null then this method will try to determine which function to execute
+     * based on the specified params along with the new restriction,
+     * If the supplier returns null then the super impl. will be called as a fallback.
+     *
+     * @return the result of the executed function
+     */
     @Override
     public Flux<T> find() {
 

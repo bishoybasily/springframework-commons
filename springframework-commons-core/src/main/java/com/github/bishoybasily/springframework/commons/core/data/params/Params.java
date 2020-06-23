@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * A General purpose & flexible params object that can be used for pagination and sort with any entity
+ *
  * @author bishoybasily
  * @since 3/15/20
  */

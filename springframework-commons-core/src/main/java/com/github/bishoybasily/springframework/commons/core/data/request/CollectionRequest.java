@@ -11,6 +11,10 @@ import reactor.core.publisher.Flux;
 import java.util.function.Supplier;
 
 /**
+ * A generic Collection Request object that can be populated with the common cases for fetching any entity,
+ * entities can be fetched with a specific sort or a specific offset and count or all of them,
+ * based on the specified params, an appropriate function will be called which should have been set beforehand
+ *
  * @author bishoybasily
  * @since 3/15/20
  */
@@ -34,6 +38,14 @@ public class CollectionRequest<T> {
         this.params = params;
     }
 
+    /**
+     * Determines the which function to execute based on the specified params,
+     * If a pagination is requested then {@link #allPage} will be executed,
+     * If no pagination and only sort is passed then {@link #allSort} will be executed,
+     * If neither a pagination nor sort is requested then {@link #all} will be executed
+     *
+     * @return the result of the executed function
+     */
     public Flux<T> find() {
 
         if (params.isPaginationPresented()) {
@@ -47,6 +59,14 @@ public class CollectionRequest<T> {
         }
     }
 
+    /**
+     * Constructs a new instance of {@link RCollectionRequest<T,R>} in a fluent style,
+     * with all the super type variables populated
+     *
+     * @param r1Supplier
+     * @param <R>
+     * @return
+     */
     public <R> RCollectionRequest<T, R> r(Supplier<R> r1Supplier) {
 
         RCollectionRequest<T, R> rRequest = new RCollectionRequest<>(params, r1Supplier);
