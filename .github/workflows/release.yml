@@ -17,14 +17,12 @@ jobs:
         with:
           java-version: 11
 
-      - id: Install GPG Key
-        name: Install gpg secret key
+      - name: Install gpg secret key
         run: |
           cat <(echo -e "${{ secrets.gpg_private_key }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
 
-      - id: Publish
-        name: Publish to Central Repository
+      - name: Publish to Central Repository
         env:
           MAVEN_USERNAME: ${{ secrets.nexus_username }}
           MAVEN_PASSWORD: ${{ secrets.nexus_password }}
