@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
@@ -17,10 +17,20 @@ jobs:
         with:
           java-version: 11
 
-      - name: Release Maven package
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.gpg_private_key }}
-          gpg_passphrase: ${{ secrets.gpg_passphrase }}
-          nexus_username: ${{ secrets.nexus_username }}
-          nexus_password: ${{ secrets.nexus_password }}
+      - id: Install GPG Key
+        name: Install gpg secret key
+        run: |
+          cat <(echo -e "${{ secrets.gpg_private_key }}") | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
+
+      - id: Publish
+        name: Publish to Central Repository
+        env:
+          MAVEN_USERNAME: ${{ secrets.nexus_username }}
+          MAVEN_PASSWORD: ${{ secrets.nexus_password }}
+        run: |
+          mvn \
+            --no-transfer-progress \
+            --batch-mode \
+            -Dgpg.passphrase=${{ secrets.gpg_passphrase }} \
+            clean deploy
