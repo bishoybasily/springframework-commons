@@ -28,7 +28,6 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.nexus_password }}
         run: |
           mvn \
-            --no-transfer-progress \
-            --batch-mode \
-            -Dgpg.passphrase=${{ secrets.gpg_passphrase }} \
+            -D gpg.keyname=ED3F24F6A3AA99BA \
+            -D gpg.passphrase=${{ secrets.gpg_passphrase }} \
             clean deploy
