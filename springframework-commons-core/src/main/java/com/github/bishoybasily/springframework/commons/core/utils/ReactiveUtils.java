@@ -11,8 +11,12 @@ import java.util.concurrent.Callable;
  */
 public class ReactiveUtils {
 
+    public static <T> Mono<T> toMono(Callable<T> callable) {
+        return Mono.fromCallable(callable);
+    }
+
     public static <T> Flux<T> toFlux(Callable<Iterable<T>> callable) {
-        return Mono.fromCallable(callable).flatMapIterable(it -> it);
+        return toMono(callable).flatMapIterable(it -> it);
     }
 
 }

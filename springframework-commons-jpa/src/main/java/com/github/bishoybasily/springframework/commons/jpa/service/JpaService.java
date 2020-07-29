@@ -1,7 +1,9 @@
 package com.github.bishoybasily.springframework.commons.jpa.service;
 
+import com.github.bishoybasily.springframework.commons.core.data.Updatable;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
+import com.github.bishoybasily.springframework.commons.core.data.request.RCollectionRequest;
 import com.github.bishoybasily.springframework.commons.core.utils.ReactiveUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +27,7 @@ import java.util.function.Supplier;
  * @author bishoybasily
  * @since 2/22/20
  */
-public interface JpaService<E, I extends Serializable, P extends Params> {
+public interface JpaService<E extends Updatable<E>, I extends Serializable, P extends Params> {
 
     /**
      * Fetches single entity by id, and wraps it in a reactive @{@link Mono} wrapper,
@@ -48,6 +50,10 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
      * @return the matched records
      */
     default Flux<E> all(P p) {
+        return createCollectionRequest(p).find();
+    }
+
+    default RCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
         return new CollectionRequest<E>(p)
                 .setAll(() -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll()))
                 .setAllSort(sort -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(sort)))
@@ -55,8 +61,7 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
                 .r(() -> getSpecification(p))
                 .setRAll(spec -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec)))
                 .setRAllSort((spec, sort) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, sort)))
-                .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)))
-                .find();
+                .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)));
     }
 
     /**
@@ -81,6 +86,17 @@ public interface JpaService<E, I extends Serializable, P extends Params> {
         return Mono.fromCallable(() -> {
             return getJpaRepository().saveAll(es);
         }).flatMapIterable(it -> it);
+    }
+
+    /**
+     * Updates single entity by id
+     *
+     * @param i the id of the targeted entity
+     * @param e the new update object
+     * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
+     */
+    default Mono<E> update(I i, E e) {
+        return one(i).map(it -> it.update(e)).flatMap(this::save);
     }
 
     /**

@@ -2,8 +2,8 @@ package com.github.bishoybasily.springframework.commons.mongo.service;
 
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
-import com.github.bishoybasily.springframework.commons.mongo.repository.MongoRepository;
 import com.google.common.annotations.Beta;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,11 +19,13 @@ public interface MongoService<E, I extends Serializable, P extends Params> {
     }
 
     default Flux<E> all(P p) {
+        return createCollectionRequest(p).find();
+    }
+
+    default CollectionRequest<E> createCollectionRequest(P p) {
         return new CollectionRequest<E>(p)
                 .setAll(() -> getMongoRepository().findAll())
-                .setAllSort(sort -> getMongoRepository().findAll(sort))
-                .setAllPage(pageable -> getMongoRepository().findAll(pageable))
-                .find();
+                .setAllSort(sort -> getMongoRepository().findAll(sort));
     }
 
     default Mono<E> save(E e) {
@@ -46,6 +48,6 @@ public interface MongoService<E, I extends Serializable, P extends Params> {
         return RuntimeException::new;
     }
 
-    MongoRepository<E, I> getMongoRepository();
+    ReactiveMongoRepository<E, I> getMongoRepository();
 
 }
