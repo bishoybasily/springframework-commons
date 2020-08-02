@@ -19,9 +19,9 @@ jobs:
 
       - name: Install gpg secret key
         run: |
-          cat <(echo -e "${{ secrets.gpg_key }}") | gpg --batch --import
-          gpg --list-secret-keys --keyid-format LONG
-          export GPG_TTY=$(tty)
+          cat <(echo -e "${{ secrets.gpg_key }}") | gpg --batch --import \
+            gpg --list-secret-keys --keyid-format LONG \
+            export GPG_TTY=$(tty)
 
       - name: Publish to Central Repository
         env:
