@@ -18,6 +18,8 @@ jobs:
           java-version: 1.8
 
       - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn \
             --no-transfer-progress \
