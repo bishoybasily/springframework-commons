@@ -9,26 +9,16 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-
-      - name: Install Java and Maven
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Publish
+      - uses: actions/checkout@v2
+      - name: Set up Maven Central Repository
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+      - name: Publish package
+        run: mvn -B deploy
         env:
           MAVEN_USERNAME: ${{ secrets.nexus_username }}
           MAVEN_PASSWORD: ${{ secrets.nexus_password }}
-        run: |
-          mvn \
-            --no-transfer-progress \
-            --batch-mode \
-            clean deploy
