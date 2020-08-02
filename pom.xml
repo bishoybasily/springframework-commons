@@ -77,17 +77,17 @@
     <build>
         <plugins>
 
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.sonatype.plugins</groupId>-->
+            <!--                <artifactId>nexus-staging-maven-plugin</artifactId>-->
+            <!--                <version>1.6.7</version>-->
+            <!--                <extensions>true</extensions>-->
+            <!--                <configuration>-->
+            <!--                    <serverId>ossrh</serverId>-->
+            <!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+            <!--                    <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -127,20 +127,20 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
+            <!--                <version>1.6</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>sign-artifacts</id>-->
+            <!--                        <phase>verify</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>sign</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
 
         </plugins>
     </build>
@@ -230,14 +230,22 @@
         </dependencies>
     </dependencyManagement>
 
+    <!--    <distributionManagement>-->
+    <!--        <snapshotRepository>-->
+    <!--            <id>ossrh</id>-->
+    <!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+    <!--        </snapshotRepository>-->
+    <!--        <repository>-->
+    <!--            <id>ossrh</id>-->
+    <!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+    <!--        </repository>-->
+    <!--    </distributionManagement>-->
+
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/bishoybasily/springframework-commons</url>
         </repository>
     </distributionManagement>
 

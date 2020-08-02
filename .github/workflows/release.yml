@@ -17,17 +17,10 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Install gpg secret key
-        run: |
-          export GPG_TTY=$(tty) && cat <(echo -e "${{ secrets.gpg_key }}") | gpg --batch --import && gpg --list-secret-keys --keyid-format LONG
+      - name: Publish
 
-      - name: Publish to Central Repository
-        env:
-          MAVEN_USERNAME: ${{ secrets.nexus_username }}
-          MAVEN_PASSWORD: ${{ secrets.nexus_password }}
         run: |
           mvn \
             --no-transfer-progress \
             --batch-mode \
-            -D gpg.passphrase=${{ secrets.gpg_passphrase }} \
             clean deploy
