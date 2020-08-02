@@ -9,40 +9,51 @@ General-purpose abstractions for spring-based projects
 
 ```xml
 <repositories>
+
     <repository>
-        <id>github-bishoybasily-springframework-commons</id>
-        <url>https://raw.github.com/bishoybasily/springframework-commons/</url>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
+        <id>sonatype</id>
+        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
+    <repository>
+        <id>sonatype-snapshot</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    
+    ...
+
 </repositories>
 ```
 
 ##### add the dependencies you want
 
 ```xml
-...
-<dependency>
-    <groupId>com.github.bishoybasily</groupId>
-    <artifactId>springframework-commons-core</artifactId>
-    <version>${springframework-commons.version}</version>
-</dependency>
-<dependency>
-    <groupId>com.github.bishoybasily</groupId>
-    <artifactId>springframework-commons-jpa</artifactId>
-    <version>${springframework-commons.version}</version>
-</dependency>
-<dependency>
-    <groupId>com.github.bishoybasily</groupId>
-    <artifactId>springframework-commons-mongo</artifactId>
-    <version>${springframework-commons.version}</version>
-</dependency>
-<dependency>
-    <groupId>com.github.bishoybasily</groupId>
-    <artifactId>springframework-commons-amqp</artifactId>
-    <version>${springframework-commons.version}</version>
-</dependency>
-...
+<dependencies>
+
+    <dependency>
+        <groupId>com.github.bishoybasily</groupId>
+        <artifactId>springframework-commons-core</artifactId>
+        <version>${springframework-commons.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.bishoybasily</groupId>
+        <artifactId>springframework-commons-jpa</artifactId>
+        <version>${springframework-commons.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.bishoybasily</groupId>
+        <artifactId>springframework-commons-mongo</artifactId>
+        <version>${springframework-commons.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.bishoybasily</groupId>
+        <artifactId>springframework-commons-amqp</artifactId>
+        <version>${springframework-commons.version}</version>
+    </dependency>
+
+    ...
+
+</dependencies>
 ```
+
+
+
