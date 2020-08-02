@@ -1,26 +1,29 @@
-![Maven Package](https://github.com/bishoybasily/springframework-commons/workflows/Maven%20Package/badge.svg)
+![Release](https://github.com/bishoybasily/springframework-commons/workflows/Release/badge.svg)
 
 # Spring Framework Commons
-Some abstractions for the common logic while working with spring framework
+General-purpose abstractions for spring-based projects
 
 ### Installation
 
-##### enable the sonatype repositories
+##### enable the repository
 
 ```xml
-<repository>
-    <id>sonatype</id>
-    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-</repository>
-<repository>
-    <id>sonatype-snapshot</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-</repository>
+<repositories>
+    <repository>
+        <id>github-bishoybasily-springframework-commons</id>
+        <url>https://raw.github.com/bishoybasily/springframework-commons/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+</repositories>
 ```
 
 ##### add the dependencies you want
 
 ```xml
+...
 <dependency>
     <groupId>com.github.bishoybasily</groupId>
     <artifactId>springframework-commons-core</artifactId>
@@ -41,4 +44,5 @@ Some abstractions for the common logic while working with spring framework
     <artifactId>springframework-commons-amqp</artifactId>
     <version>${springframework-commons.version}</version>
 </dependency>
+...
 ```
