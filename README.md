@@ -5,7 +5,7 @@ General-purpose abstractions for spring-based projects
 
 ### Installation
 
-##### enable the repository
+##### enable sonatype repositories
 
 ```xml
 <repositories>
