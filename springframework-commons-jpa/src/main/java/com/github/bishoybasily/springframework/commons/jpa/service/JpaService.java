@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public interface JpaService<E extends Updatable<E>, I extends Serializable, P extends Params> {
 
     /**
-     * Fetches single entity by id, and wraps it in a reactive @{@link Mono} wrapper,
+     * Fetches single entity by id, and wraps it in a reactive {@link Mono} wrapper,
      * if no entity found, the exception supplied by {@link JpaService#supplyNotFoundException(I)} will be thrown
      *
      * @param i the id to find the entity
@@ -43,10 +43,10 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     }
 
     /**
-     * Retrieves all of the records as reactive @{@link Flux},
+     * Retrieves all of the records as reactive {@link Flux},
      * filtered based on the passed params
      *
-     * @param p an object that extends @{@link Params} to use as filter
+     * @param p an object that extends {@link Params} to use as filter
      * @return the matched records
      */
     default Flux<E> all(P p) {
@@ -68,7 +68,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * Persists single entity
      *
      * @param e the entity to be persisted
-     * @return the persisted entity wrapped in a reactive @{@link Mono}
+     * @return the persisted entity wrapped in a reactive {@link Mono}
      */
     default Mono<E> save(E e) {
         return Mono.fromCallable(() -> {
@@ -80,12 +80,23 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * Persists multiple entities
      *
      * @param es the entities to be persisted
-     * @return the persisted entities wrapped in a reactive @{@link Flux}
+     * @return the persisted entities wrapped in a reactive {@link Flux}
      */
     default Flux<E> save(Iterable<E> es) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().saveAll(es);
         }).flatMapIterable(it -> it);
+    }
+
+    /**
+     * Prepares the update version of the entity,
+     * This could be useful in scenarios where some initialization logic has to be executed to prepare the update payload like populating some properties in the payload
+     *
+     * @param e the update payload
+     * @return the update payload after preparation wrapped in a reactive {@link Mono}
+     */
+    default Mono<E> prepareUpdate(E e) {
+        return Mono.just(e);
     }
 
     /**
@@ -96,14 +107,14 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
      */
     default Mono<E> update(I i, E e) {
-        return one(i).map(it -> it.update(e)).flatMap(this::save);
+        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::save);
     }
 
     /**
      * Deletes entity by id
      *
      * @param i the id to be used for deletion
-     * @return the deleted entity wrapped in a reactive @{@link Mono} in case of some undo logic needs to be implemented
+     * @return the deleted entity wrapped in a reactive {@link Mono} in case of some undo logic needs to be implemented
      */
     default Mono<E> delete(I i) {
         return Mono.fromCallable(() -> {
@@ -116,7 +127,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     /**
      * Maps the exception that will be thrown in case of failing to delete this entity
      *
-     * @return an @{@link Function} implementation for mapping the throwable
+     * @return an {@link Function} implementation for mapping the throwable
      */
     default Function<Throwable, Throwable> mapCanNotDeleteException() {
         return throwable -> new RuntimeException();
@@ -126,7 +137,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * Supplies an exception to be thrown in case of entity wasn't found
      *
      * @param i the id that originally passed to find or delete this entity
-     * @return an @{@link Supplier} implementation for customizing the exception
+     * @return an {@link Supplier} implementation for customizing the exception
      */
     default Supplier<RuntimeException> supplyNotFoundException(I i) {
         return RuntimeException::new;
@@ -138,8 +149,8 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     JpaRepository<E, I> getJpaRepository();
 
     /**
-     * @return a @{@link JpaSpecificationExecutor} implementation for the specified entity
-     * which is ideally the same instance that will be returned from {@link JpaService#getJpaRepository()} after extending @{@link JpaSpecificationExecutor}
+     * @return a {@link JpaSpecificationExecutor} implementation for the specified entity
+     * which is ideally the same instance that will be returned from {@link JpaService#getJpaRepository()} after extending {@link JpaSpecificationExecutor}
      */
     default JpaSpecificationExecutor<E> getJpaSpecificationExecutor() {
         return null;
@@ -147,7 +158,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
 
     /**
      * @param p the specified filtration object
-     * @return a @{@link Specification} implementation to use while retrieving all records
+     * @return a {@link Specification} implementation to use while retrieving all records
      */
     default Specification<E> getSpecification(P p) {
         return null;

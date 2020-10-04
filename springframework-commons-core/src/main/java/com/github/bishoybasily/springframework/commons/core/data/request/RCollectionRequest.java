@@ -55,12 +55,12 @@ public class RCollectionRequest<T, R> extends CollectionRequest<T> {
             return super.find();
 
         if (params.isPaginationPresented()) {
-            return rAllPage.findAll(r, params.pageable());
+            return rAllPage.find(r, params.pageable());
         } else {
             if (params.isSortPresented()) {
-                return rAllSort.findAll(r, params.sort());
+                return rAllSort.find(r, params.sort());
             } else {
-                return rAll.findAll(r);
+                return rAll.find(r);
             }
         }
 

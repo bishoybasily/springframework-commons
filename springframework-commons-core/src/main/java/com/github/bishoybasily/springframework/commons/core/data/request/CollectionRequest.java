@@ -49,12 +49,12 @@ public class CollectionRequest<T> {
     public Flux<T> find() {
 
         if (params.isPaginationPresented()) {
-            return allPage.findAll(params.pageable());
+            return allPage.find(params.pageable());
         } else {
             if (params.isSortPresented()) {
-                return allSort.findAll(params.sort());
+                return allSort.find(params.sort());
             } else {
-                return all.findAll();
+                return all.find();
             }
         }
     }

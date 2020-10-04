@@ -10,6 +10,6 @@ import reactor.core.publisher.Flux;
 @FunctionalInterface
 public interface AllPage<T> {
 
-    Flux<T> findAll(Pageable pageable);
+    Flux<T> find(Pageable pageable);
 
 }

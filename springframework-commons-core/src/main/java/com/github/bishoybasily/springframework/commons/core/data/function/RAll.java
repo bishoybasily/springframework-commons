@@ -9,6 +9,6 @@ import reactor.core.publisher.Flux;
 @FunctionalInterface
 public interface RAll<T, R> {
 
-    Flux<T> findAll(R r);
+    Flux<T> find(R r);
 
 }

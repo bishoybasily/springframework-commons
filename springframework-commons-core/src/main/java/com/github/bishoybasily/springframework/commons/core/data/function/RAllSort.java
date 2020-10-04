@@ -10,6 +10,6 @@ import reactor.core.publisher.Flux;
 @FunctionalInterface
 public interface RAllSort<T, R> {
 
-    Flux<T> findAll(R r, Sort sort);
+    Flux<T> find(R r, Sort sort);
 
 }

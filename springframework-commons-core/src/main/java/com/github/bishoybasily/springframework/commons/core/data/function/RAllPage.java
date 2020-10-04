@@ -10,6 +10,6 @@ import reactor.core.publisher.Flux;
 @FunctionalInterface
 public interface RAllPage<T, R> {
 
-    Flux<T> findAll(R r, Pageable pageable);
+    Flux<T> find(R r, Pageable pageable);
 
 }
