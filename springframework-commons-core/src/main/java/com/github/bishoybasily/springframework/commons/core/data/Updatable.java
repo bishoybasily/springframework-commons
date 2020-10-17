@@ -7,7 +7,7 @@ package com.github.bishoybasily.springframework.commons.core.data;
 public interface Updatable<T> {
 
     default T update(T t) {
-        return t;
+        throw new UnsupportedOperationException("Unimplemented update method...");
     }
 
 }
