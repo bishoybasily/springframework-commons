@@ -107,7 +107,17 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
      */
     default Mono<E> update(I i, E e) {
-        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::save);
+        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::save).flatMap(this::postUpdate);
+    }
+
+    /**
+     * Can be used to execute any some logic after updating this entity, can be used for auditing purposes
+     *
+     * @param e the updated entity after saving it
+     * @return the same passed entity
+     */
+    default Mono<E> postUpdate(E e) {
+        return Mono.just(e);
     }
 
     /**
