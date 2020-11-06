@@ -73,7 +73,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Mono<E> save(E e) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().save(e);
-        });
+        }).flatMap(this::postSave);
     }
 
     /**
@@ -85,7 +85,11 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Flux<E> save(Iterable<E> es) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().saveAll(es);
-        }).flatMapIterable(it -> it);
+        }).flatMapIterable(it -> it).flatMap(this::postSave);
+    }
+
+    default Mono<E> postSave(E e) {
+        return Mono.just(e);
     }
 
     /**
@@ -111,9 +115,9 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     }
 
     /**
-     * Can be used to execute any some logic after updating this entity, can be used for auditing purposes
+     * Can be used to execute some logic after updating this entity, can be used for auditing purposes
      *
-     * @param e the updated entity after saving it
+     * @param e the updated entity after persisting it
      * @return the same passed entity
      */
     default Mono<E> postUpdate(E e) {
@@ -131,7 +135,17 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
             E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
             getJpaRepository().delete(e);
             return e;
-        }).onErrorMap(mapCanNotDeleteException());
+        }).onErrorMap(mapCanNotDeleteException()).flatMap(this::postDelete);
+    }
+
+    /**
+     * Can be used to execute some logic after deleting this entity, can be used for auditing purposes
+     *
+     * @param e the deleted entity after removing it
+     * @return the same passed entity
+     */
+    default Mono<E> postDelete(E e) {
+        return Mono.just(e);
     }
 
     /**
