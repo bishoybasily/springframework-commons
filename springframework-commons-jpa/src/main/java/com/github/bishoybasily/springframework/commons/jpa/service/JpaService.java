@@ -70,10 +70,10 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @param e the entity to be persisted
      * @return the persisted entity wrapped in a reactive {@link Mono}
      */
-    default Mono<E> save(E e) {
+    default Mono<E> persist(E e) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().save(e);
-        }).flatMap(this::postSave);
+        }).flatMap(this::postPersist);
     }
 
     /**
@@ -82,13 +82,13 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @param es the entities to be persisted
      * @return the persisted entities wrapped in a reactive {@link Flux}
      */
-    default Flux<E> save(Iterable<E> es) {
+    default Flux<E> persist(Iterable<E> es) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().saveAll(es);
-        }).flatMapIterable(it -> it).flatMap(this::postSave);
+        }).flatMapIterable(it -> it).flatMap(this::postPersist);
     }
 
-    default Mono<E> postSave(E e) {
+    default Mono<E> postPersist(E e) {
         return Mono.just(e);
     }
 
@@ -111,7 +111,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
      */
     default Mono<E> update(I i, E e) {
-        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::save).flatMap(this::postUpdate);
+        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::persist).flatMap(this::postUpdate);
     }
 
     /**
