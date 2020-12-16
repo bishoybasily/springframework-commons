@@ -135,7 +135,14 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
             E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
             getJpaRepository().delete(e);
             return e;
-        }).onErrorMap(mapCanNotDeleteException()).flatMap(this::postDelete);
+        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
+    }
+
+    default Mono<E> delete(E e) {
+        return Mono.fromCallable(() -> {
+            getJpaRepository().delete(e);
+            return e;
+        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
     }
 
     /**
