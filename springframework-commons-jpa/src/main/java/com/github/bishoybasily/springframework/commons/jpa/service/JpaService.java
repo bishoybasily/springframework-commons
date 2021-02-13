@@ -54,145 +54,141 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     }
 
     default RCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
-        return new CollectionRequest<E>(p)
-                .setAll(() -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll()))
-                .setAllSort(sort -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(sort)))
-                .setAllPage(pageable -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(pageable)))
-                .r(() -> getSpecification(p))
-                .setRAll(spec -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec)))
-                .setRAllSort((spec, sort) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, sort)))
-                .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)));
+      return new CollectionRequest<E>(p)
+        .setAll(() -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll()))
+        .setAllSort(sort -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(sort)))
+        .setAllPage(pageable -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(pageable)))
+        .r(() -> getSpecification(p))
+        .setRAll(spec -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec)))
+        .setRAllSort((spec, sort) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, sort)))
+        .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)));
     }
 
-    /**
-     * Persists single entity
-     *
-     * @param e the entity to be persisted
-     * @return the persisted entity wrapped in a reactive {@link Mono}
-     */
-    default Mono<E> persist(E e) {
-        return Mono.fromCallable(() -> {
-            return getJpaRepository().save(e);
-        }).flatMap(this::postPersist);
-    }
+  default Mono<E> preSave(E e) {
+    return Mono.just(e);
+  }
 
-    /**
-     * Persists multiple entities
-     *
-     * @param es the entities to be persisted
-     * @return the persisted entities wrapped in a reactive {@link Flux}
-     */
-    default Flux<E> persist(Iterable<E> es) {
-        return Mono.fromCallable(() -> {
-            return getJpaRepository().saveAll(es);
-        }).flatMapIterable(it -> it).flatMap(this::postPersist);
-    }
+  /**
+   * Persists single entity
+   *
+   * @param e the entity to be persisted
+   * @return the persisted entity wrapped in a reactive {@link Mono}
+   */
+  default Mono<E> save(E e) {
+    return preSave(e).flatMap(this::doPersist).flatMap(this::postSave);
+  }
 
-    default Mono<E> postPersist(E e) {
-        return Mono.just(e);
-    }
+  default Mono<E> postSave(E e) {
+    return Mono.just(e);
+  }
 
-    /**
-     * Prepares the update version of the entity,
-     * This could be useful in scenarios where some initialization logic has to be executed to prepare the update payload like populating some properties in the payload
-     *
-     * @param e the update payload
-     * @return the update payload after preparation wrapped in a reactive {@link Mono}
-     */
-    default Mono<E> prepareUpdate(E e) {
-        return Mono.just(e);
-    }
+  /**
+   * Prepares the update version of the entity,
+   * This could be useful in scenarios where some initialization logic has to be executed to prepare the update payload like populating some properties in the payload
+   *
+   * @param e the update payload
+   * @return the update payload after preparation wrapped in a reactive {@link Mono}
+   */
+  default Mono<E> preUpdate(E e) {
+    return Mono.just(e);
+  }
 
-    /**
-     * Updates single entity by id
-     *
-     * @param i the id of the targeted entity
-     * @param e the new update object
-     * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
-     */
-    default Mono<E> update(I i, E e) {
-        return one(i).zipWith(prepareUpdate(e), Updatable::update).flatMap(this::persist).flatMap(this::postUpdate);
-    }
+  /**
+   * Updates single entity by id
+   *
+   * @param i the id of the targeted entity
+   * @param e the new update object
+   * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
+   */
+  default Mono<E> update(I i, E e) {
+    return one(i).zipWith(preUpdate(e), Updatable::update).flatMap(this::doPersist).flatMap(this::postUpdate);
+  }
 
-    /**
-     * Can be used to execute some logic after updating this entity, can be used for auditing purposes
-     *
-     * @param e the updated entity after persisting it
-     * @return the same passed entity
-     */
-    default Mono<E> postUpdate(E e) {
-        return Mono.just(e);
-    }
+  /**
+   * Can be used to execute some logic after updating this entity, can be used for auditing purposes
+   *
+   * @param e the updated entity after persisting it
+   * @return the same passed entity
+   */
+  default Mono<E> postUpdate(E e) {
+    return Mono.just(e);
+  }
 
-    /**
-     * Deletes entity by id
-     *
-     * @param i the id to be used for deletion
-     * @return the deleted entity wrapped in a reactive {@link Mono} in case of some undo logic needs to be implemented
-     */
-    default Mono<E> delete(I i) {
-        return Mono.fromCallable(() -> {
-            E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
-            getJpaRepository().delete(e);
-            return e;
-        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
-    }
+  default Mono<E> doPersist(E e) {
+    return Mono.fromCallable(() -> {
+      return getJpaRepository().save(e);
+    });
+  }
 
-    default Mono<E> delete(E e) {
-        return Mono.fromCallable(() -> {
-            getJpaRepository().delete(e);
-            return e;
-        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
-    }
+  /**
+   * Deletes entity by id
+   *
+   * @param i the id to be used for deletion
+   * @return the deleted entity wrapped in a reactive {@link Mono} in case of some undo logic needs to be implemented
+   */
+  default Mono<E> delete(I i) {
+    return Mono.fromCallable(() -> {
+      E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
+      getJpaRepository().delete(e);
+      return e;
+    }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
+  }
 
-    /**
-     * Can be used to execute some logic after deleting this entity, can be used for auditing purposes
-     *
-     * @param e the deleted entity after removing it
-     * @return the same passed entity
-     */
-    default Mono<E> postDelete(E e) {
-        return Mono.just(e);
-    }
+  default Mono<E> delete(E e) {
+    return Mono.fromCallable(() -> {
+      getJpaRepository().delete(e);
+      return e;
+    }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
+  }
 
-    /**
-     * Maps the exception that will be thrown in case of failing to delete this entity
-     *
-     * @return an {@link Function} implementation for mapping the throwable
-     */
-    default Function<Throwable, Throwable> mapCanNotDeleteException() {
-        return throwable -> new RuntimeException();
-    }
+  /**
+   * Can be used to execute some logic after deleting this entity, can be used for auditing purposes
+   *
+   * @param e the deleted entity after removing it
+   * @return the same passed entity
+   */
+  default Mono<E> postDelete(E e) {
+    return Mono.just(e);
+  }
 
-    /**
-     * Supplies an exception to be thrown in case of entity wasn't found
-     *
-     * @param i the id that originally passed to find or delete this entity
-     * @return an {@link Supplier} implementation for customizing the exception
-     */
-    default Supplier<RuntimeException> supplyNotFoundException(I i) {
-        return RuntimeException::new;
-    }
+  /**
+   * Maps the exception that will be thrown in case of failing to delete this entity
+   *
+   * @return an {@link Function} implementation for mapping the throwable
+   */
+  default Function<Throwable, Throwable> mapCanNotDeleteException() {
+    return throwable -> new RuntimeException();
+  }
 
-    /**
-     * @return a {@link JpaRepository} implementation for the specified entity
-     */
-    JpaRepository<E, I> getJpaRepository();
+  /**
+   * Supplies an exception to be thrown in case of entity wasn't found
+   *
+   * @param i the id that originally passed to find or delete this entity
+   * @return an {@link Supplier} implementation for customizing the exception
+   */
+  default Supplier<RuntimeException> supplyNotFoundException(I i) {
+    return RuntimeException::new;
+  }
 
-    /**
-     * @return a {@link JpaSpecificationExecutor} implementation for the specified entity
-     * which is ideally the same instance that will be returned from {@link JpaService#getJpaRepository()} after extending {@link JpaSpecificationExecutor}
-     */
-    default JpaSpecificationExecutor<E> getJpaSpecificationExecutor() {
-        return null;
-    }
+  /**
+   * @return a {@link JpaRepository} implementation for the specified entity
+   */
+  JpaRepository<E, I> getJpaRepository();
 
-    /**
-     * @param p the specified filtration object
-     * @return a {@link Specification} implementation to use while retrieving all records
-     */
-    default Specification<E> getSpecification(P p) {
-        return null;
-    }
+  /**
+   * @return a {@link JpaSpecificationExecutor} implementation for the specified entity
+   * which is ideally the same instance that will be returned from {@link JpaService#getJpaRepository()} after extending {@link JpaSpecificationExecutor}
+   */
+  default JpaSpecificationExecutor<E> getJpaSpecificationExecutor() {
+    return null;
+  }
+
+  /**
+   * @param p the specified filtration object
+   * @return a {@link Specification} implementation to use while retrieving all records
+   */
+  default Specification<E> getSpecification(P p) {
+    return null;
+  }
 
 }
