@@ -6,7 +6,6 @@ import com.github.bishoybasily.springframework.commons.core.data.function.AllSor
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import reactor.core.publisher.Flux;
 
 import java.util.function.Supplier;
 
@@ -46,37 +45,37 @@ public class CollectionRequest<T> {
      *
      * @return the result of the executed function
      */
-    public Flux<T> find() {
+    public Iterable<T> find() {
 
-        if (params.isPaginationPresented()) {
-            return allPage.find(params.pageable());
+      if (params.isPaginationPresented()) {
+        return allPage.find(params.pageable());
+      } else {
+        if (params.isSortPresented()) {
+          return allSort.find(params.sort());
         } else {
-            if (params.isSortPresented()) {
-                return allSort.find(params.sort());
-            } else {
-                return all.find();
-            }
+          return all.find();
         }
+      }
     }
 
-    /**
-     * Constructs a new instance of {@link RCollectionRequest<T,R>} in a fluent style,
-     * with all the super type variables populated
-     *
-     * @param r1Supplier
-     * @param <R>
-     * @return
-     */
-    public <R> RCollectionRequest<T, R> r(Supplier<R> r1Supplier) {
+  /**
+   * Constructs a new instance of {@link SpecificationCollectionRequest <T,R>} in a fluent style,
+   * with all the super type variables populated
+   *
+   * @param r1Supplier
+   * @param <R>
+   * @return
+   */
+  public <R> SpecificationCollectionRequest<T, R> r(Supplier<R> r1Supplier) {
 
-        RCollectionRequest<T, R> rRequest = new RCollectionRequest<>(params, r1Supplier);
+    SpecificationCollectionRequest<T, R> rRequest = new SpecificationCollectionRequest<>(params, r1Supplier);
 
-        rRequest
-                .setAll(all)
-                .setAllSort(allSort)
-                .setAllPage(allPage);
+    rRequest
+      .setAll(all)
+      .setAllSort(allSort)
+      .setAllPage(allPage);
 
-        return rRequest;
-    }
+    return rRequest;
+  }
 
 }

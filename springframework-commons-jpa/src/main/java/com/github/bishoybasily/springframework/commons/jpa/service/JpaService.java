@@ -3,7 +3,7 @@ package com.github.bishoybasily.springframework.commons.jpa.service;
 import com.github.bishoybasily.springframework.commons.core.data.Updatable;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
-import com.github.bishoybasily.springframework.commons.core.data.request.RCollectionRequest;
+import com.github.bishoybasily.springframework.commons.core.data.request.SpecificationCollectionRequest;
 import com.github.bishoybasily.springframework.commons.core.utils.ReactiveUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,32 +37,41 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the found entity
      */
     default Mono<E> one(I i) {
-        return Mono.fromCallable(() -> {
-            return getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
-        });
+      return Mono.fromCallable(() -> {
+        return getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
+      });
     }
 
-    /**
-     * Retrieves all of the records as reactive {@link Flux},
-     * filtered based on the passed params
-     *
-     * @param p an object that extends {@link Params} to use as filter
-     * @return the matched records
-     */
-    default Flux<E> all(P p) {
-        return createCollectionRequest(p).find();
-    }
+  /**
+   * Retrieves all of the records as reactive {@link Flux},
+   * filtered based on the passed params
+   *
+   * @param p an object that extends {@link Params} to use as filter
+   * @return the matched records
+   */
+  default Flux<E> all(P p) {
+    return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find());
+  }
 
-    default RCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
-      return new CollectionRequest<E>(p)
-        .setAll(() -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll()))
-        .setAllSort(sort -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(sort)))
-        .setAllPage(pageable -> ReactiveUtils.toFlux(() -> getJpaRepository().findAll(pageable)))
-        .r(() -> getSpecification(p))
-        .setRAll(spec -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec)))
-        .setRAllSort((spec, sort) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, sort)))
-        .setRAllPage((spec, pageable) -> ReactiveUtils.toFlux(() -> getJpaSpecificationExecutor().findAll(spec, pageable)));
-    }
+  default Mono<Iterable<E>> allIterable(P p) {
+    return ReactiveUtils.toMono(() -> createCollectionRequest(p).find());
+  }
+
+  default SpecificationCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
+
+    JpaRepository<E, I> jpaRepository = getJpaRepository();
+    JpaSpecificationExecutor<E> jpaSpecificationExecutor = getJpaSpecificationExecutor();
+
+    return new CollectionRequest<E>(p)
+      .setAll(jpaRepository::findAll)
+      .setAllSort(jpaRepository::findAll)
+      .setAllPage(jpaRepository::findAll)
+      .r(() -> getSpecification(p))
+      .setSpecificationAll(jpaSpecificationExecutor::findAll)
+      .setSpecificationAllSort(jpaSpecificationExecutor::findAll)
+      .setSpecificationAllPage(jpaSpecificationExecutor::findAll);
+
+  }
 
   default Mono<E> preSave(E e) {
     return Mono.just(e);

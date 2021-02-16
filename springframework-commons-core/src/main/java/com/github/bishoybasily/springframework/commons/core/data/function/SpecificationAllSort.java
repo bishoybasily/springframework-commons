@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
  * @since 3/15/20
  */
 @FunctionalInterface
-public interface AllSort<T> {
+public interface SpecificationAllSort<T, S> {
 
-    Iterable<T> find(Sort sort);
+  Iterable<T> find(S s, Sort sort);
 
 }

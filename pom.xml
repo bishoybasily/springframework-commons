@@ -7,13 +7,12 @@
     <modules>
         <module>springframework-commons-core</module>
         <module>springframework-commons-jpa</module>
-        <module>springframework-commons-mongo</module>
         <module>springframework-commons-amqp</module>
     </modules>
 
     <groupId>com.github.bishoybasily</groupId>
     <artifactId>springframework-commons</artifactId>
-    <version>2.8-SNAPSHOT</version>
+    <version>2.9-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>springframework-commons</name>
     <description>General-purpose abstractions for spring-based projects</description>
