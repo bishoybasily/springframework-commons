@@ -6,6 +6,7 @@ import com.github.bishoybasily.springframework.commons.core.data.function.AllSor
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.util.ObjectUtils;
 
 import java.util.function.Supplier;
 
@@ -47,6 +48,9 @@ public class CollectionRequest<T> {
      */
     public Iterable<T> find() {
 
+      if (ObjectUtils.isEmpty(params))
+        return all.find();
+
       if (params.isPaginationPresented()) {
         return allPage.find(params.pageable());
       } else {
@@ -56,6 +60,7 @@ public class CollectionRequest<T> {
           return all.find();
         }
       }
+
     }
 
   /**
