@@ -1,6 +1,6 @@
 package com.github.bishoybasily.springframework.commons.core.utils;
 
-import com.github.bishoybasily.springframework.commons.core.utils.model.Node;
+import com.github.bishoybasily.springframework.commons.core.data.model.Node;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.github.bishoybasily.springframework.commons.core.utils.model;
+package com.github.bishoybasily.springframework.commons.core.data.model;
 
 
 import lombok.Data;
