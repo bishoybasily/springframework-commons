@@ -1,6 +1,7 @@
 package com.github.bishoybasily.springframework.commons.core.utils;
 
 import com.github.bishoybasily.springframework.commons.core.data.model.Node;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,11 @@ public class MapUtils {
     }
 
     private static List<Node> visit(Map<String, ?> map, Node parent, List<Node> nodes) {
-        map.forEach((k, v) -> {
-            if (v instanceof Map) visit((Map) v, new Node(k).setParent(parent), nodes);
-            else nodes.add(new Node(k).setParent(parent).setValue(v));
-        });
+        if (!ObjectUtils.isEmpty(map))
+            map.forEach((k, v) -> {
+                if (v instanceof Map) visit((Map) v, new Node(k).setParent(parent), nodes);
+                else nodes.add(new Node(k).setParent(parent).setValue(v));
+            });
         return nodes;
     }
 
