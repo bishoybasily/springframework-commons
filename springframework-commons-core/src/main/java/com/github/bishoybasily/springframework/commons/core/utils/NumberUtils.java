@@ -8,32 +8,48 @@ import java.util.Random;
  */
 public class NumberUtils {
 
-  public static Integer random() {
-    int min = 111111;
-    int max = 999999;
-    return random(min, max);
-  }
-
-  public static Integer random(int min, int max) {
-    return new Random().nextInt(max - min + 1) + min;
-  }
-
-  public static Double[][] ranges(double min, double step, int count, double fraction) {
-
-    Double[][] result = new Double[count][2];
-
-    result[0][0] = null;
-    result[0][1] = min - fraction;
-
-    for (int i = 1; i < count - 1; i++) {
-      result[i][0] = result[i - 1][1] + fraction;
-      result[i][1] = min + (step * i) - fraction;
+    public static Integer random() {
+        int min = 111111;
+        int max = 999999;
+        return random(min, max);
     }
 
-    result[count - 1][0] = (step * (count - 1)) - fraction;
-    result[count - 1][1] = null;
+    public static Integer random(int min, int max) {
+        return new Random().nextInt(max - min + 1) + min;
+    }
 
-    return result;
-  }
+    public static Double[][] ranges(double min, double step, int count, double fraction) {
+
+        Double[][] result = new Double[count][2];
+
+        result[0][0] = null;
+        result[0][1] = min - fraction;
+
+        for (int i = 1; i < count - 1; i++) {
+            result[i][0] = result[i - 1][1] + fraction;
+            result[i][1] = min + (step * i) - fraction;
+        }
+
+        result[count - 1][0] = (step * (count - 1)) - fraction;
+        result[count - 1][1] = null;
+
+        return result;
+    }
+
+    public static Long parseLong(String value, Long def) {
+        try {
+            return Long.parseLong(value);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    public static Integer parseInteger(String value, Integer def) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return def;
+        }
+    }
 
 }
