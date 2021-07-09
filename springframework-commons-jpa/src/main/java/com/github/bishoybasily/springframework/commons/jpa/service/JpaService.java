@@ -39,7 +39,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Mono<E> one(I i) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
-        });
+        }).map(cleaner());
     }
 
     /**
@@ -50,7 +50,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the matched records
      */
     default Flux<E> all(P p) {
-        return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find());
+        return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find()).map(cleaner());
     }
 
     default Mono<Iterable<E>> allIterable(P p) {
@@ -84,7 +84,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the persisted entity wrapped in a reactive {@link Mono}
      */
     default Mono<E> save(E e) {
-        return preSave(e).flatMap(this::persist).flatMap(this::postSave);
+        return preSave(e).flatMap(this::persist).flatMap(this::postSave).map(cleaner());
     }
 
     default Mono<E> postSave(E e) {
@@ -110,7 +110,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
      */
     default Mono<E> update(I i, E e) {
-        return one(i).zipWith(preUpdate(e), Updatable::update).flatMap(this::persist).flatMap(this::postUpdate);
+        return one(i).zipWith(preUpdate(e), Updatable::update).flatMap(this::persist).flatMap(this::postUpdate).map(cleaner());
     }
 
     /**
@@ -126,7 +126,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Mono<E> persist(E e) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().save(e);
-        });
+        }).map(cleaner());
     }
 
     /**
@@ -140,18 +140,18 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
             E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
             getJpaRepository().delete(e);
             return e;
-        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
+        }).flatMap(this::postDelete).map(cleaner()).onErrorMap(mapCanNotDeleteException());
     }
 
     default Mono<E> delete(E e) {
         return Mono.fromCallable(() -> {
             getJpaRepository().delete(e);
             return e;
-        }).flatMap(this::postDelete).onErrorMap(mapCanNotDeleteException());
+        }).flatMap(this::postDelete).map(cleaner()).onErrorMap(mapCanNotDeleteException());
     }
 
     default Flux<E> delete(I[] is) {
-        return Flux.fromArray(is).flatMap(this::delete);
+        return Flux.fromArray(is).flatMap(this::delete).map(cleaner());
     }
 
     /**
@@ -202,6 +202,10 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      */
     default Specification<E> getSpecification(P p) {
         return null;
+    }
+
+    default Function<E, E> cleaner() {
+        return it -> it;
     }
 
 }
