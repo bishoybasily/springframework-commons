@@ -64,7 +64,7 @@ public class CollectionRequest<T> {
     }
 
   /**
-   * Constructs a new instance of {@link SpecificationCollectionRequest <T,R>} in a fluent style,
+   * Constructs a new instance of {@link SpecificationCollectionRequest} in a fluent style,
    * with all the super type variables populated
    *
    * @param r1Supplier
