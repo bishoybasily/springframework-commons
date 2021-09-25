@@ -37,12 +37,58 @@ version = "3.0.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 java {
+    withJavadocJar()
     withSourcesJar()
 }
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("binary") {
+
+            from(components["java"])
+
+            pom {
+
+                val projectGitUrl = "https://github.com/bishoybasily/springframework-commons"
+                name.set(rootProject.name)
+                description.set("Common logic for spring based projects")
+                url.set(projectGitUrl)
+                inceptionYear.set("2021")
+
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("bishoybasily")
+                        name.set("Bishoy Basily")
+                        email.set("bishoybasily@gmail.com")
+                        url.set("https://github.com/bishoybasily")
+                    }
+                }
+                issueManagement {
+                    system.set("GitHub")
+                    url.set("$projectGitUrl/issues")
+                }
+                scm {
+                    connection.set("scm:git:$projectGitUrl")
+                    developerConnection.set("scm:git:$projectGitUrl")
+                    url.set(projectGitUrl)
+                }
+
+            }
+
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            credentials(PasswordCredentials::class)
+        }
     }
 }
 
