@@ -34,20 +34,20 @@
         </developer>
     </developers>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-      <maven.compiler.source>11</maven.compiler.source>
-      <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
 
-    <reactor.version>3.3.4.RELEASE</reactor.version>
-    <guava.version>30.0-jre</guava.version>
-    <lombok.version>1.18.18</lombok.version>
-    <spring-data.version>2.2.11.RELEASE</spring-data.version>
-    <spring-amqp.version>2.2.11.RELEASE</spring-amqp.version>
-    <jackson.version>2.11.2</jackson.version>
-  </properties>
+        <reactor.version>3.3.4.RELEASE</reactor.version>
+        <guava.version>30.0-jre</guava.version>
+        <lombok.version>1.18.18</lombok.version>
+        <spring-data.version>2.2.11.RELEASE</spring-data.version>
+        <spring-amqp.version>2.2.11.RELEASE</spring-amqp.version>
+        <jackson.version>2.11.2</jackson.version>
+    </properties>
 
     <dependencies>
 
@@ -76,55 +76,51 @@
         <plugins>
 
             <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-source-plugin</artifactId>
-              <version>2.2.1</version>
-              <executions>
-                <execution>
-                  <id>attach-sources</id>
-                  <goals>
-                    <goal>jar-no-fork</goal>
-                  </goals>
-                </execution>
-              </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-<!--          <plugin>-->
-<!--            <groupId>org.apache.maven.plugins</groupId>-->
-<!--            <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--            <version>3.1.1</version>-->
-<!--            <configuration>-->
-<!--              <detectJavaApiLink>false</detectJavaApiLink>-->
-<!--            </configuration>-->
-<!--            <executions>-->
-<!--              <execution>-->
-<!--                <id>attach-javadocs</id>-->
-<!--                <goals>-->
-<!--                  <goal>jar</goal>-->
-<!--                </goals>-->
-<!--              </execution>-->
-<!--            </executions>-->
-<!--          </plugin>-->
+            <!--          <plugin>-->
+            <!--            <groupId>org.apache.maven.plugins</groupId>-->
+            <!--            <artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--            <version>3.1.1</version>-->
+            <!--            <configuration>-->
+            <!--              <detectJavaApiLink>false</detectJavaApiLink>-->
+            <!--            </configuration>-->
+            <!--            <executions>-->
+            <!--              <execution>-->
+            <!--                <id>attach-javadocs</id>-->
+            <!--                <goals>-->
+            <!--                  <goal>jar</goal>-->
+            <!--                </goals>-->
+            <!--              </execution>-->
+            <!--            </executions>-->
+            <!--          </plugin>-->
 
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-            <configuration>
-              <source>${java.version}</source>
-              <target>${java.version}</target>
-            </configuration>
-          </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
 
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.7</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
 
@@ -149,13 +145,13 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-              <version>5.4.18.Final</version>
+                <version>5.4.18.Final</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-              <version>5.3.4</version>
+                <version>5.3.4</version>
             </dependency>
 
             <dependency>
