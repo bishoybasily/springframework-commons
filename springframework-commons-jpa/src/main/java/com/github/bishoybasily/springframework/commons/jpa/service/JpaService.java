@@ -57,6 +57,10 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
         return ReactiveUtils.toMono(() -> createCollectionRequest(p).find());
     }
 
+    default Mono<Long> allCount(P p) {
+        return ReactiveUtils.toMono(() -> createCollectionRequest(p).count());
+    }
+
     default SpecificationCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
 
         JpaRepository<E, I> jpaRepository = getJpaRepository();
@@ -66,14 +70,16 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
                 .setAll(jpaRepository::findAll)
                 .setAllSort(jpaRepository::findAll)
                 .setAllPage(jpaRepository::findAll)
-                .r(() -> getSpecification(p))
-                .setSpecificationAll(jpaSpecificationExecutor::findAll)
-                .setSpecificationAllSort(jpaSpecificationExecutor::findAll)
-                .setSpecificationAllPage(jpaSpecificationExecutor::findAll);
+                .setCount(jpaRepository::count)
+                .spec(() -> getSpecification(p))
+                .setSpecAll(jpaSpecificationExecutor::findAll)
+                .setSpecAllSort(jpaSpecificationExecutor::findAll)
+                .setSpecAllPage(jpaSpecificationExecutor::findAll)
+                .setSpecCount(jpaSpecificationExecutor::count);
 
     }
 
-    default Mono<E> preSave(E e) {
+    default Mono<E> preCreate(E e) {
         return Mono.just(e);
     }
 
@@ -83,11 +89,11 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @param e the entity to be persisted
      * @return the persisted entity wrapped in a reactive {@link Mono}
      */
-    default Mono<E> save(E e) {
-        return preSave(e).flatMap(this::persist).flatMap(this::postSave).map(cleaner());
+    default Mono<E> create(E e) {
+        return preCreate(e).flatMap(this::persist).flatMap(this::postCreate).map(cleaner());
     }
 
-    default Mono<E> postSave(E e) {
+    default Mono<E> postCreate(E e) {
         return Mono.just(e);
     }
 

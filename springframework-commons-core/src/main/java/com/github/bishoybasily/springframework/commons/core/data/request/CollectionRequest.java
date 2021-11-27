@@ -3,6 +3,7 @@ package com.github.bishoybasily.springframework.commons.core.data.request;
 import com.github.bishoybasily.springframework.commons.core.data.function.All;
 import com.github.bishoybasily.springframework.commons.core.data.function.AllPage;
 import com.github.bishoybasily.springframework.commons.core.data.function.AllSort;
+import com.github.bishoybasily.springframework.commons.core.data.function.Count;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -34,6 +35,10 @@ public class CollectionRequest<T> {
         throw new UnsupportedOperationException();
     };
 
+    protected Count count = () -> {
+        throw new UnsupportedOperationException();
+    };
+
     public CollectionRequest(Params params) {
         this.params = params;
     }
@@ -48,39 +53,43 @@ public class CollectionRequest<T> {
      */
     public Iterable<T> find() {
 
-      if (ObjectUtils.isEmpty(params))
-        return all.find();
+        if (ObjectUtils.isEmpty(params))
+            return all.find();
 
-      if (params.isPaginationPresented()) {
-        return allPage.find(params.pageable());
-      } else {
-        if (params.isSortPresented()) {
-          return allSort.find(params.sort());
+        if (params.isPaginationPresented()) {
+            return allPage.find(params.pageable());
         } else {
-          return all.find();
+            if (params.isSortPresented()) {
+                return allSort.find(params.sort());
+            } else {
+                return all.find();
+            }
         }
-      }
 
     }
 
-  /**
-   * Constructs a new instance of {@link SpecificationCollectionRequest} in a fluent style,
-   * with all the super type variables populated
-   *
-   * @param r1Supplier
-   * @param <R>
-   * @return
-   */
-  public <R> SpecificationCollectionRequest<T, R> r(Supplier<R> r1Supplier) {
+    public Long count() {
+        return count.count();
+    }
 
-    SpecificationCollectionRequest<T, R> rRequest = new SpecificationCollectionRequest<>(params, r1Supplier);
+    /**
+     * Constructs a new instance of {@link SpecificationCollectionRequest} in a fluent style,
+     * with all the super type variables populated
+     *
+     * @param specSupplier
+     * @param <R>
+     * @return
+     */
+    public <R> SpecificationCollectionRequest<T, R> spec(Supplier<R> specSupplier) {
 
-    rRequest
-      .setAll(all)
-      .setAllSort(allSort)
-      .setAllPage(allPage);
+        SpecificationCollectionRequest<T, R> specRequest = new SpecificationCollectionRequest<>(params, specSupplier);
 
-    return rRequest;
-  }
+        specRequest
+                .setAll(all)
+                .setAllSort(allSort)
+                .setAllPage(allPage);
+
+        return specRequest;
+    }
 
 }
