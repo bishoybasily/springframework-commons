@@ -2,28 +2,29 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>springframework-commons</artifactId>
-    <groupId>com.github.bishoybasily</groupId>
-    <version>3.0.2-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <artifactId>springframework-commons</artifactId>
+        <groupId>com.github.bishoybasily</groupId>
+        <version>3.0.3-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>springframework-commons-amqp</artifactId>
+    <artifactId>springframework-commons-amqp</artifactId>
 
-  <dependencies>
+    <dependencies>
 
-    <dependency>
-      <groupId>com.github.bishoybasily</groupId>
-      <artifactId>springframework-commons-core</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>com.github.bishoybasily</groupId>
+            <artifactId>springframework-commons-core</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.springframework.amqp</groupId>
-      <artifactId>spring-rabbit</artifactId>
-      <!--            <optional>true</optional>-->
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
 
 </project>
