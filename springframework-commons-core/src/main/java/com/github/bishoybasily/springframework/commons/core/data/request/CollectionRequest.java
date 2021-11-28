@@ -7,6 +7,7 @@ import com.github.bishoybasily.springframework.commons.core.data.function.Count;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
 
 import java.util.function.Supplier;
@@ -65,6 +66,15 @@ public class CollectionRequest<T> {
                 return all.find();
             }
         }
+
+    }
+
+    public Page<T> slice() {
+
+        if (ObjectUtils.isEmpty(params) || !params.isPaginationPresented())
+            throw new IllegalArgumentException("Pagination params can't be empty");
+
+        return allPage.find(params.pageable());
 
     }
 

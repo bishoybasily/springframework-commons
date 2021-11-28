@@ -5,6 +5,7 @@ import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
 import com.github.bishoybasily.springframework.commons.core.data.request.SpecificationCollectionRequest;
 import com.github.bishoybasily.springframework.commons.core.utils.ReactiveUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -43,7 +44,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     }
 
     /**
-     * Retrieves all of the records as reactive {@link Flux},
+     * Retrieves all the records as reactive {@link Flux},
      * filtered based on the passed params
      *
      * @param p an object that extends {@link Params} to use as filter
@@ -53,11 +54,18 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
         return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find()).map(cleaner());
     }
 
-    default Mono<Iterable<E>> allIterable(P p) {
-        return ReactiveUtils.toMono(() -> createCollectionRequest(p).find());
+    /**
+     * Retrieves Page/Slice of the data as {@link Mono} of {@link Page} according to the passed pagination params,
+     * throws {@link IllegalArgumentException} if pagination params are not presented
+     *
+     * @param p
+     * @return
+     */
+    default Mono<Page<E>> slice(P p) {
+        return ReactiveUtils.toMono(() -> createCollectionRequest(p).slice().map(cleaner()));
     }
 
-    default Mono<Long> allCount(P p) {
+    default Mono<Long> count(P p) {
         return ReactiveUtils.toMono(() -> createCollectionRequest(p).count());
     }
 

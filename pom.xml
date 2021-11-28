@@ -12,7 +12,7 @@
 
     <groupId>com.github.bishoybasily</groupId>
     <artifactId>springframework-commons</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>springframework-commons</name>
     <description>General-purpose abstractions for spring-based projects</description>

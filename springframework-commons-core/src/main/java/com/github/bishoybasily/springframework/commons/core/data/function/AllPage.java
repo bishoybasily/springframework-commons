@@ -1,5 +1,6 @@
 package com.github.bishoybasily.springframework.commons.core.data.function;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -9,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 @FunctionalInterface
 public interface AllPage<T> {
 
-    Iterable<T> find(Pageable pageable);
+    Page<T> find(Pageable pageable);
 
 }

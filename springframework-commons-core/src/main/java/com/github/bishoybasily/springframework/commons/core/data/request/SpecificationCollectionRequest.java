@@ -7,6 +7,7 @@ import com.github.bishoybasily.springframework.commons.core.data.function.Specif
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
 
 import java.util.function.Supplier;
@@ -70,6 +71,20 @@ public class SpecificationCollectionRequest<T, S> extends CollectionRequest<T> {
     }
 
     @Override
+    public Page<T> slice() {
+
+        if (ObjectUtils.isEmpty(params) || !params.isPaginationPresented())
+            throw new IllegalArgumentException("Pagination params can't be empty");
+
+        S spec = specSupplier.get();
+
+        if (ObjectUtils.isEmpty(spec))
+            return super.slice();
+
+        return specAllPage.find(spec, params.pageable());
+    }
+
+    @Override
     public Long count() {
 
         S spec = specSupplier.get();
@@ -80,4 +95,5 @@ public class SpecificationCollectionRequest<T, S> extends CollectionRequest<T> {
         return specCount.count(spec);
 
     }
+
 }
