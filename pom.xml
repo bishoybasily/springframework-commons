@@ -48,7 +48,7 @@
         <spring-data.version>2.6.2</spring-data.version>
         <spring-amqp.version>2.4.2</spring-amqp.version>
         <hibernate-core.version>5.6.5.Final</hibernate-core.version>
-        <spring-core.version>5.3.4</spring-core.version>
+        <spring-core.version>5.3.14</spring-core.version>
         <jackson.version>2.13.1</jackson.version>
 
     </properties>
