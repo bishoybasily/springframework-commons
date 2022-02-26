@@ -1,4 +1,4 @@
-package com.github.bishoybasily.springframework.commons.core.data.model;
+package com.github.bishoybasily.springframework.commons.core.data.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

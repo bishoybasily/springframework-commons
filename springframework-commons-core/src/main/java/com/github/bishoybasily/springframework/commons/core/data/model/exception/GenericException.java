@@ -1,6 +1,6 @@
 package com.github.bishoybasily.springframework.commons.core.data.model.exception;
 
-import com.github.bishoybasily.springframework.commons.core.data.model.Response;
+import com.github.bishoybasily.springframework.commons.core.data.model.dto.Response;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

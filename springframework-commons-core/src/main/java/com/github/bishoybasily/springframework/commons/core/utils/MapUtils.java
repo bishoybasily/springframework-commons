@@ -1,6 +1,8 @@
 package com.github.bishoybasily.springframework.commons.core.utils;
 
-import com.github.bishoybasily.springframework.commons.core.data.model.Node;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
@@ -23,4 +25,28 @@ public class MapUtils {
         return nodes;
     }
 
+    @Data
+    @Accessors(chain = true)
+    @RequiredArgsConstructor
+    public static class Node {
+
+        private final String key;
+        private Object value;
+        private Node parent;
+
+        public String getPath() {
+
+            Node p = parent;
+            String path = "";
+
+            while (p != null) {
+                path = String.format("%s.%s", p.getKey(), ObjectUtils.isEmpty(path) ? key : path);
+                p = p.parent;
+            }
+
+            return path;
+
+        }
+
+    }
 }

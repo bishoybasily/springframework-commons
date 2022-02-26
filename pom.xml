@@ -12,7 +12,7 @@
 
     <groupId>com.github.bishoybasily</groupId>
     <artifactId>springframework-commons</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>springframework-commons</name>
     <description>General-purpose abstractions for spring-based projects</description>
@@ -41,14 +41,14 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <reactor.version>3.3.4.RELEASE</reactor.version>
-        <guava.version>30.0-jre</guava.version>
-        <lombok.version>1.18.18</lombok.version>
+        <reactor.version>3.4.15</reactor.version>
+        <guava.version>31.0.1-jre</guava.version>
+        <lombok.version>1.18.22</lombok.version>
 
-        <spring-data.version>2.2.11.RELEASE</spring-data.version>
-        <spring-amqp.version>2.2.11.RELEASE</spring-amqp.version>
+        <spring-data.version>2.6.2</spring-data.version>
+        <spring-amqp.version>2.4.2</spring-amqp.version>
 
-        <jackson.version>2.11.2</jackson.version>
+        <jackson.version>2.13.1</jackson.version>
     </properties>
 
     <dependencies>
