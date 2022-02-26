@@ -47,8 +47,10 @@
 
         <spring-data.version>2.6.2</spring-data.version>
         <spring-amqp.version>2.4.2</spring-amqp.version>
-
+        <hibernate-core.version>5.6.5.Final</hibernate-core.version>
+        <spring-core.version>5.3.4</spring-core.version>
         <jackson.version>2.13.1</jackson.version>
+
     </properties>
 
     <dependencies>
@@ -147,13 +149,13 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>5.4.18.Final</version>
+                <version>${hibernate-core.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>5.3.4</version>
+                <version>${spring-core.version}</version>
             </dependency>
 
             <dependency>

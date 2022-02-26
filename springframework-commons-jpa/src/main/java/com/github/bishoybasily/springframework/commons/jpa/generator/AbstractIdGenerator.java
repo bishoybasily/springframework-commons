@@ -17,76 +17,76 @@ public abstract class AbstractIdGenerator extends UUIDGenerator {
 
         try {
 
-          Field field = null;
-          Method method = null;
+            Field field = null;
+            Method method = null;
 
-          Class<?> cls = object.getClass();
-          found:
-          while (!ObjectUtils.isEmpty(cls)) {
+            Class<?> cls = object.getClass();
+            found:
+            while (!ObjectUtils.isEmpty(cls)) {
 
-            try {
-              for (Method m : cls.getDeclaredMethods()) {
-                boolean annotatedWithId = m.isAnnotationPresent(Id.class);
-                boolean isString = m.getReturnType().getSuperclass().isAssignableFrom(String.class);
-                if (annotatedWithId && isString) {
-                  method = m;
-                  break found;
+                try {
+                    for (Method m : cls.getDeclaredMethods()) {
+                        boolean annotatedWithId = m.isAnnotationPresent(Id.class);
+                        boolean isString = m.getReturnType().getSuperclass().isAssignableFrom(String.class);
+                        if (annotatedWithId && isString) {
+                            method = m;
+                            break found;
+                        }
+                    }
+                } catch (Exception e) {
+                    // ignore this
                 }
-              }
-            } catch (Exception e) {
-              // ignore this
+
+                try {
+                    for (Field f : cls.getDeclaredFields()) {
+                        boolean annotatedWithId = f.isAnnotationPresent(Id.class);
+                        boolean isString = f.getType().getSuperclass().isAssignableFrom(String.class);
+                        if (annotatedWithId && isString) {
+                            field = f;
+                            break found;
+                        }
+                    }
+                } catch (Exception e) {
+                    // ignore this
+                }
+
+                cls = cls.getSuperclass();
+
             }
 
-            try {
-              for (Field f : cls.getDeclaredFields()) {
-                boolean annotatedWithId = f.isAnnotationPresent(Id.class);
-                boolean isString = f.getType().getSuperclass().isAssignableFrom(String.class);
-                if (annotatedWithId && isString) {
-                  field = f;
-                  break found;
-                }
-              }
-            } catch (Exception e) {
-              // ignore this
+            if (ObjectUtils.isEmpty(method) && ObjectUtils.isEmpty(field))
+                throw new RuntimeException();
+
+            if (!ObjectUtils.isEmpty(field)) {
+
+                field.setAccessible(true);
+
+                String id = (String) field.get(object);
+
+                if (ObjectUtils.isEmpty(id))
+                    return generate(session);
+
+                return id;
+
             }
 
-            cls = cls.getSuperclass();
+            if (!ObjectUtils.isEmpty(method)) {
 
-          }
+                method.setAccessible(true);
 
-          if (ObjectUtils.isEmpty(method) && ObjectUtils.isEmpty(field))
-            throw new RuntimeException();
+                String id = (String) method.invoke(object);
 
-          if (!ObjectUtils.isEmpty(field)) {
+                if (ObjectUtils.isEmpty(id))
+                    return generate(session);
 
-            field.setAccessible(true);
+                return id;
 
-            String id = (String) field.get(object);
+            }
 
-            if (ObjectUtils.isEmpty(id))
-              return generate(session);
-
-            return id;
-
-          }
-
-          if (!ObjectUtils.isEmpty(method)) {
-
-            method.setAccessible(true);
-
-            String id = (String) method.invoke(object);
-
-            if (ObjectUtils.isEmpty(id))
-              return generate(session);
-
-            return id;
-
-          }
-
-          throw new IllegalStateException();
+            throw new IllegalStateException();
 
         } catch (IllegalAccessException | InvocationTargetException e) {
-          throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
 
     }
