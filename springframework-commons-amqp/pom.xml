@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>springframework-commons-amqp</artifactId>
+    <packaging>jar</packaging>
+    <name>springframework-commons :: amqp</name>
 
     <dependencies>
 

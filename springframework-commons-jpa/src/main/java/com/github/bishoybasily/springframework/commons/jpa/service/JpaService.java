@@ -98,7 +98,10 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the persisted entity wrapped in a reactive {@link Mono}
      */
     default Mono<E> create(E e) {
-        return preCreate(e).flatMap(this::persist).flatMap(this::postCreate).map(cleaner());
+        return preCreate(e)
+                .flatMap(this::persist)
+                .flatMap(this::postCreate)
+                .map(cleaner());
     }
 
     default Mono<E> postCreate(E e) {
@@ -124,7 +127,11 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the updated entity after overriding the presented properties, the update implementation is dependent on the entity business use cases which means that some attrs may not be overrideable
      */
     default Mono<E> update(I i, E e) {
-        return one(i).zipWith(preUpdate(e), Updatable::update).flatMap(this::persist).flatMap(this::postUpdate).map(cleaner());
+        return one(i)
+                .zipWith(preUpdate(e), Updatable::update)
+                .flatMap(this::persist)
+                .flatMap(this::postUpdate)
+                .map(cleaner());
     }
 
     /**
@@ -154,18 +161,26 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
             E e = getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
             getJpaRepository().delete(e);
             return e;
-        }).flatMap(this::postDelete).map(cleaner()).onErrorMap(mapCanNotDeleteException());
+        })
+                .flatMap(this::postDelete)
+                .map(cleaner())
+                .onErrorMap(mapCanNotDeleteException());
     }
 
     default Mono<E> delete(E e) {
         return Mono.fromCallable(() -> {
             getJpaRepository().delete(e);
             return e;
-        }).flatMap(this::postDelete).map(cleaner()).onErrorMap(mapCanNotDeleteException());
+        })
+                .flatMap(this::postDelete)
+                .map(cleaner())
+                .onErrorMap(mapCanNotDeleteException());
     }
 
     default Flux<E> delete(I[] is) {
-        return Flux.fromArray(is).flatMap(this::delete).map(cleaner());
+        return Flux.fromArray(is)
+                .flatMap(this::delete)
+                .map(cleaner());
     }
 
     /**
