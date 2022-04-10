@@ -9,6 +9,6 @@ import org.springframework.data.domain.Sort;
 @FunctionalInterface
 public interface SpecificationAllSort<T, S> {
 
-  Iterable<T> find(S s, Sort sort);
+    Iterable<T> find(S s, Sort sort);
 
 }

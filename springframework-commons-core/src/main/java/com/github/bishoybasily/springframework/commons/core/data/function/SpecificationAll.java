@@ -7,6 +7,6 @@ package com.github.bishoybasily.springframework.commons.core.data.function;
 @FunctionalInterface
 public interface SpecificationAll<T, S> {
 
-  Iterable<T> find(S s);
+    Iterable<T> find(S s);
 
 }

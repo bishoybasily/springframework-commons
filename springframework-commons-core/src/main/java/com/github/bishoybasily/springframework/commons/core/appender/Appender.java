@@ -7,6 +7,6 @@ package com.github.bishoybasily.springframework.commons.core.appender;
 @FunctionalInterface
 public interface Appender<T> {
 
-	T append(T t1, T t2);
+    T append(T t1, T t2);
 
 }

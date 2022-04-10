@@ -14,16 +14,16 @@ public interface AmqpPublisher {
     RabbitTemplate getRabbitTemplate();
 
     default <T> Mono<T> publish(String exchange, String routingKey, T t) {
-      return ReactiveUtils.toMono(() -> {
-        getRabbitTemplate().convertAndSend(exchange, routingKey, t);
-        return t;
-      });
+        return ReactiveUtils.toMono(() -> {
+            getRabbitTemplate().convertAndSend(exchange, routingKey, t);
+            return t;
+        });
     }
 
     default <T, S> Mono<S> publishAndReceive(String exchange, String routingKey, T t, ParameterizedTypeReference<S> reference) {
-      return ReactiveUtils.toMono(() -> {
-        return getRabbitTemplate().convertSendAndReceiveAsType(exchange, routingKey, t, reference);
-      });
+        return ReactiveUtils.toMono(() -> {
+            return getRabbitTemplate().convertSendAndReceiveAsType(exchange, routingKey, t, reference);
+        });
     }
 
 }

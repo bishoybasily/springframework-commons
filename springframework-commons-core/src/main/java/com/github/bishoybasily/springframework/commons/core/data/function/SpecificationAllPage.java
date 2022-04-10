@@ -10,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 @FunctionalInterface
 public interface SpecificationAllPage<T, S> {
 
-  Page<T> find(S s, Pageable pageable);
+    Page<T> find(S s, Pageable pageable);
 
 }

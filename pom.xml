@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -175,12 +175,12 @@
                 <artifactId>spring-data-jpa</artifactId>
                 <version>${spring-data.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.data</groupId>-->
-<!--                <artifactId>spring-data-mongodb</artifactId>-->
-<!--&lt;!&ndash;                <version>${spring-data.version}</version>&ndash;&gt;-->
-<!--                <version>3.3.3</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.springframework.data</groupId>-->
+            <!--                <artifactId>spring-data-mongodb</artifactId>-->
+            <!--&lt;!&ndash;                <version>${spring-data.version}</version>&ndash;&gt;-->
+            <!--                <version>3.3.3</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
@@ -219,6 +219,11 @@
             <dependency>
                 <groupId>com.github.bishoybasily</groupId>
                 <artifactId>springframework-commons-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.bishoybasily</groupId>
+                <artifactId>springframework-commons-mongodb</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

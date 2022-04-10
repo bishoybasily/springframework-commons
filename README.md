@@ -1,6 +1,7 @@
 ![Release](https://github.com/bishoybasily/springframework-commons/workflows/Release/badge.svg)
 
 # Spring Framework Commons
+
 General-purpose abstractions for spring-based projects
 
 ### Installation

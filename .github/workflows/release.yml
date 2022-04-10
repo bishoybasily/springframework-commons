@@ -21,11 +21,11 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
-#      - name: Validate Gradle
-#        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      #      - name: Validate Gradle
+      #        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
       - name: Publish package
-#        run: gradle publish -P mavenUsername=${{ secrets.nexus_username }} -P mavenPassword=${{ secrets.nexus_password }}
+        #        run: gradle publish -P mavenUsername=${{ secrets.nexus_username }} -P mavenPassword=${{ secrets.nexus_password }}
         run: mvn -batch-mode --no-transfer-progress deploy
         env:
           MAVEN_USERNAME: ${{ secrets.nexus_username }}
