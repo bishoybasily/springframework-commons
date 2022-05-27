@@ -6,7 +6,7 @@ General-purpose abstractions for spring-based projects
 
 ### Installation
 
-##### enable sonatype repositories
+#### enable sonatype repositories
 
 ```xml
 <repositories>
@@ -25,36 +25,42 @@ General-purpose abstractions for spring-based projects
 </repositories>
 ```
 
-##### add the dependencies you want
+#### add the dependencies
 
 ```xml
-<dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
 
-    <dependency>
-        <groupId>com.github.bishoybasily</groupId>
-        <artifactId>springframework-commons-core</artifactId>
-        <version>${springframework-commons.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.github.bishoybasily</groupId>
-        <artifactId>springframework-commons-jpa</artifactId>
-        <version>${springframework-commons.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.github.bishoybasily</groupId>
-        <artifactId>springframework-commons-mongo</artifactId>
-        <version>${springframework-commons.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.github.bishoybasily</groupId>
-        <artifactId>springframework-commons-amqp</artifactId>
-        <version>${springframework-commons.version}</version>
-    </dependency>
+    <dependencies>
 
-    ...
+        <dependency>
+            <groupId>com.github.bishoybasily</groupId>
+            <artifactId>springframework-commons-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.bishoybasily</groupId>
+            <artifactId>springframework-commons-jpa</artifactId>
+        </dependency>
+        
+        ...
+        
+    </dependencies>
 
-</dependencies>
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.github.bishoybasily</groupId>
+                <artifactId>springframework-commons</artifactId>
+                <version>${springframework-commons.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            ...
+
+        </dependencies>
+    </dependencyManagement>
+    
+</project>
 ```
-
-
 

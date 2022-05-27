@@ -3,6 +3,7 @@ package com.github.bishoybasily.springframework.commons.core.data.params;
 import com.google.common.collect.Streams;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 public class Params {
 
     private Integer page;

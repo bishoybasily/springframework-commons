@@ -3,7 +3,6 @@ package com.github.bishoybasily.springframework.commons.jpa.service;
 import com.github.bishoybasily.springframework.commons.core.data.Updatable;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import com.github.bishoybasily.springframework.commons.core.data.request.CollectionRequest;
-import com.github.bishoybasily.springframework.commons.core.data.request.SpecificationCollectionRequest;
 import com.github.bishoybasily.springframework.commons.core.utils.ReactiveUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -69,17 +69,22 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
         return ReactiveUtils.toMono(() -> createCollectionRequest(p).count());
     }
 
-    default SpecificationCollectionRequest<E, Specification<E>> createCollectionRequest(P p) {
+    default CollectionRequest<E, P, Specification<E>> createCollectionRequest(P p) {
 
         JpaRepository<E, I> jpaRepository = getJpaRepository();
         JpaSpecificationExecutor<E> jpaSpecificationExecutor = getJpaSpecificationExecutor();
 
-        return new CollectionRequest<E>(p)
+        return new CollectionRequest<E, P, Specification<E>>()
+
+                .setOptionalParams(Optional.ofNullable(p))
+
                 .setAll(jpaRepository::findAll)
                 .setAllSort(jpaRepository::findAll)
                 .setAllPage(jpaRepository::findAll)
                 .setCount(jpaRepository::count)
-                .spec(() -> getSpecification(p))
+
+                .setOptionalSpecification(getSpecification(p))
+
                 .setSpecAll(jpaSpecificationExecutor::findAll)
                 .setSpecAllSort(jpaSpecificationExecutor::findAll)
                 .setSpecAllPage(jpaSpecificationExecutor::findAll)
@@ -221,16 +226,14 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return a {@link JpaSpecificationExecutor} implementation for the specified entity
      * which is ideally the same instance that will be returned from {@link #getJpaRepository()} after extending {@link JpaSpecificationExecutor}
      */
-    default JpaSpecificationExecutor<E> getJpaSpecificationExecutor() {
-        return null;
-    }
+    JpaSpecificationExecutor<E> getJpaSpecificationExecutor();
 
     /**
      * @param p the specified filtration object
      * @return a {@link Specification} implementation to use while retrieving all records
      */
-    default Specification<E> getSpecification(P p) {
-        return null;
+    default Optional<Specification<E>> getSpecification(P p) {
+        return Optional.empty();
     }
 
     default Function<E, E> cleaner() {

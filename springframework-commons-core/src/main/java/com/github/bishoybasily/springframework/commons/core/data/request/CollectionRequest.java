@@ -1,16 +1,12 @@
 package com.github.bishoybasily.springframework.commons.core.data.request;
 
-import com.github.bishoybasily.springframework.commons.core.data.function.All;
-import com.github.bishoybasily.springframework.commons.core.data.function.AllPage;
-import com.github.bishoybasily.springframework.commons.core.data.function.AllSort;
-import com.github.bishoybasily.springframework.commons.core.data.function.Count;
+import com.github.bishoybasily.springframework.commons.core.data.function.*;
 import com.github.bishoybasily.springframework.commons.core.data.params.Params;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.domain.Page;
-import org.springframework.util.ObjectUtils;
 
-import java.util.function.Supplier;
+import java.util.Optional;
 
 /**
  * A generic Collection Request object that can be populated with the common cases for fetching any entity,
@@ -22,27 +18,34 @@ import java.util.function.Supplier;
  */
 @Setter
 @Accessors(chain = true)
-public class CollectionRequest<T> {
+public class CollectionRequest<T, P extends Params, S> {
 
-    protected final Params params;
-
-    protected All<T> all = () -> {
+    private Optional<P> optionalParams = Optional.empty();
+    private All<T> all = () -> {
         throw new UnsupportedOperationException();
     };
-    protected AllSort<T> allSort = (sort) -> {
+    private AllSort<T> allSort = (sort) -> {
         throw new UnsupportedOperationException();
     };
-    protected AllPage<T> allPage = (pageable) -> {
+    private AllPage<T> allPage = (pageable) -> {
         throw new UnsupportedOperationException();
     };
-
-    protected Count count = () -> {
+    private Count count = () -> {
         throw new UnsupportedOperationException();
     };
-
-    public CollectionRequest(Params params) {
-        this.params = params;
-    }
+    private Optional<S> optionalSpecification= Optional.empty();
+    private SpecificationAll<T, S> specAll = (s) -> {
+        throw new UnsupportedOperationException();
+    };
+    private SpecificationAllSort<T, S> specAllSort = (s, sort) -> {
+        throw new UnsupportedOperationException();
+    };
+    private SpecificationAllPage<T, S> specAllPage = (s, sort) -> {
+        throw new UnsupportedOperationException();
+    };
+    private SpecificationCount<S> specCount = (s) -> {
+        throw new UnsupportedOperationException();
+    };
 
     /**
      * Determines the which function to execute based on the specified params,
@@ -53,53 +56,45 @@ public class CollectionRequest<T> {
      * @return the result of the executed function
      */
     public Iterable<T> find() {
-
-        if (ObjectUtils.isEmpty(params))
-            return all.find();
-
-        if (params.isPaginationPresented()) {
-            return allPage.find(params.pageable());
-        } else {
-            if (params.isSortPresented()) {
-                return allSort.find(params.sort());
-            } else {
-                return all.find();
-            }
-        }
-
+        return optionalParams.map(params -> {
+                    return optionalSpecification.map(spec -> {
+                                if (params.isPaginationPresented()) {
+                                    return specAllPage.find(spec, params.pageable());
+                                } else {
+                                    if (params.isSortPresented()) {
+                                        return specAllSort.find(spec, params.sort());
+                                    } else {
+                                        return specAll.find(spec);
+                                    }
+                                }
+                            })
+                            .orElseGet(() -> {
+                                if (params.isPaginationPresented()) {
+                                    return allPage.find(params.pageable());
+                                } else {
+                                    if (params.isSortPresented()) {
+                                        return allSort.find(params.sort());
+                                    } else {
+                                        return all.find();
+                                    }
+                                }
+                            });
+                })
+                .orElseGet(() -> all.find());
     }
 
     public Page<T> slice() {
-
-        if (ObjectUtils.isEmpty(params) || !params.isPaginationPresented())
-            throw new IllegalArgumentException("Pagination params can't be empty");
-
-        return allPage.find(params.pageable());
-
+        final var paginationIsNotOptionalException = new IllegalArgumentException("Pagination params can't be empty");
+        return optionalParams.map(params -> {
+            if (!params.isPaginationPresented())
+                throw paginationIsNotOptionalException;
+            return allPage.find(params.pageable());
+        }).orElseThrow(() -> paginationIsNotOptionalException);
     }
 
     public Long count() {
-        return count.count();
-    }
-
-    /**
-     * Constructs a new instance of {@link SpecificationCollectionRequest} in a fluent style,
-     * with all the super type variables populated
-     *
-     * @param specSupplier
-     * @param <R>
-     * @return
-     */
-    public <R> SpecificationCollectionRequest<T, R> spec(Supplier<R> specSupplier) {
-
-        SpecificationCollectionRequest<T, R> specRequest = new SpecificationCollectionRequest<>(params, specSupplier);
-
-        specRequest
-                .setAll(all)
-                .setAllSort(allSort)
-                .setAllPage(allPage);
-
-        return specRequest;
+        return optionalSpecification.map(spec -> specCount.count(spec))
+                .orElseGet(() -> count.count());
     }
 
 }
