@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  * and exposing a reactive interface for these operations,
  * {@link #getJpaRepository()} must be implemented to provide a {@link JpaRepository} implementation,
  * If there is a "find all" filtration criteria needs to be handled,
- * both {@link #getJpaSpecificationExecutor()} and {@link #getSpecification(Params)},
+ * both {@link #getJpaSpecificationExecutor()} and {@link #getSpecification(Optional)},
  * must be implemented.
  *
  * @author bishoybasily
@@ -71,24 +71,23 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
 
     default CollectionRequest<E, P, Specification<E>> createCollectionRequest(P p) {
 
-        JpaRepository<E, I> jpaRepository = getJpaRepository();
-        JpaSpecificationExecutor<E> jpaSpecificationExecutor = getJpaSpecificationExecutor();
+        final var optionalParams = Optional.ofNullable(p);
 
         return new CollectionRequest<E, P, Specification<E>>()
 
-                .setOptionalParams(Optional.ofNullable(p))
+                .setOptionalParams(optionalParams)
 
-                .setAll(jpaRepository::findAll)
-                .setAllSort(jpaRepository::findAll)
-                .setAllPage(jpaRepository::findAll)
-                .setCount(jpaRepository::count)
+                .setAll(getJpaRepository()::findAll)
+                .setAllSort(getJpaRepository()::findAll)
+                .setAllPage(getJpaRepository()::findAll)
+                .setCount(getJpaRepository()::count)
 
-                .setOptionalSpecification(getSpecification(p))
+                .setOptionalSpecification(getSpecification(optionalParams))
 
-                .setSpecAll(jpaSpecificationExecutor::findAll)
-                .setSpecAllSort(jpaSpecificationExecutor::findAll)
-                .setSpecAllPage(jpaSpecificationExecutor::findAll)
-                .setSpecCount(jpaSpecificationExecutor::count);
+                .setSpecAll(getJpaSpecificationExecutor()::findAll)
+                .setSpecAllSort(getJpaSpecificationExecutor()::findAll)
+                .setSpecAllPage(getJpaSpecificationExecutor()::findAll)
+                .setSpecCount(getJpaSpecificationExecutor()::count);
 
     }
 
@@ -232,7 +231,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @param p the specified filtration object
      * @return a {@link Specification} implementation to use while retrieving all records
      */
-    default Optional<Specification<E>> getSpecification(P p) {
+    default Optional<Specification<E>> getSpecification(Optional<P> p) {
         return Optional.empty();
     }
 

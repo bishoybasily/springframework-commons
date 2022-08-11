@@ -7,7 +7,7 @@
     <parent>
         <artifactId>springframework-commons</artifactId>
         <groupId>com.github.bishoybasily</groupId>
-        <version>3.0.8-SNAPSHOT</version>
+        <version>3.0.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>springframework-commons-amqp</artifactId>

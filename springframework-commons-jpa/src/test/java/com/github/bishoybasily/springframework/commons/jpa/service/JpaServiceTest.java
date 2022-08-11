@@ -13,11 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import reactor.test.StepVerifier;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,9 +100,9 @@ class JpaServiceTest {
             }
 
             @Override
-            public Optional<Specification<Entity>> getSpecification(Params params) {
-                // dummy specification from params
-                return Optional.of((Specification<Entity>) (root, query, criteriaBuilder) -> root.isNotNull());
+            public Optional<Specification<Entity>> getSpecification(Optional<Params> params) {
+                // empty specification from empty params
+                return params.flatMap(p -> new ArrayList<Specification<Entity>>().stream().reduce(Specification::and));
             }
         };
 

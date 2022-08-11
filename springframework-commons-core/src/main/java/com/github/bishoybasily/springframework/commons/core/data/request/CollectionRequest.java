@@ -33,7 +33,7 @@ public class CollectionRequest<T, P extends Params, S> {
     private Count count = () -> {
         throw new UnsupportedOperationException();
     };
-    private Optional<S> optionalSpecification= Optional.empty();
+    private Optional<S> optionalSpecification = Optional.empty();
     private SpecificationAll<T, S> specAll = (s) -> {
         throw new UnsupportedOperationException();
     };
@@ -84,12 +84,23 @@ public class CollectionRequest<T, P extends Params, S> {
     }
 
     public Page<T> slice() {
-        final var paginationIsNotOptionalException = new IllegalArgumentException("Pagination params can't be empty");
+
+        final var paginationParamsMissing = new IllegalArgumentException("Pagination params can't be empty");
+
         return optionalParams.map(params -> {
-            if (!params.isPaginationPresented())
-                throw paginationIsNotOptionalException;
-            return allPage.find(params.pageable());
-        }).orElseThrow(() -> paginationIsNotOptionalException);
+                    return optionalSpecification.map(spec -> {
+                                if (params.isPaginationPresented())
+                                    return specAllPage.find(spec, params.pageable());
+                                throw paginationParamsMissing;
+                            })
+                            .orElseGet(() -> {
+                                if (params.isPaginationPresented())
+                                    return allPage.find(params.pageable());
+                                throw paginationParamsMissing;
+                            });
+                })
+                .orElseThrow(() -> paginationParamsMissing);
+
     }
 
     public Long count() {
