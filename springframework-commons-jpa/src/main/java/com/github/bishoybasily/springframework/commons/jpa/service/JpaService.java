@@ -40,7 +40,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Mono<E> one(I i) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().findById(i).orElseThrow(supplyNotFoundException(i));
-        }).map(cleaner());
+        }).map(retrieveCleaner());
     }
 
     /**
@@ -51,7 +51,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return the matched records
      */
     default Flux<E> all(P p) {
-        return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find()).map(cleaner());
+        return ReactiveUtils.toFlux(() -> createCollectionRequest(p).find()).map(retrieveCleaner());
     }
 
     /**
@@ -62,7 +62,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
      * @return
      */
     default Mono<Page<E>> slice(P p) {
-        return ReactiveUtils.toMono(() -> createCollectionRequest(p).slice().map(cleaner()));
+        return ReactiveUtils.toMono(() -> createCollectionRequest(p).slice().map(retrieveCleaner()));
     }
 
     default Mono<Long> count(P p) {
@@ -105,7 +105,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
         return preCreate(e)
                 .flatMap(this::persist)
                 .flatMap(this::postCreate)
-                .map(cleaner());
+                .map(persistCleaner());
     }
 
     default Mono<E> postCreate(E e) {
@@ -135,7 +135,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
                 .zipWith(preUpdate(e), Updatable::update)
                 .flatMap(this::persist)
                 .flatMap(this::postUpdate)
-                .map(cleaner());
+                .map(persistCleaner());
     }
 
     /**
@@ -151,7 +151,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
     default Mono<E> persist(E e) {
         return Mono.fromCallable(() -> {
             return getJpaRepository().save(e);
-        }).map(cleaner());
+        }).map(persistCleaner());
     }
 
     /**
@@ -167,7 +167,7 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
                     return e;
                 })
                 .flatMap(this::postDelete)
-                .map(cleaner())
+                .map(retrieveCleaner())
                 .onErrorMap(mapCanNotDeleteException());
     }
 
@@ -177,14 +177,14 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
                     return e;
                 })
                 .flatMap(this::postDelete)
-                .map(cleaner())
+                .map(retrieveCleaner())
                 .onErrorMap(mapCanNotDeleteException());
     }
 
     default Flux<E> delete(I[] is) {
         return Flux.fromArray(is)
                 .flatMap(this::delete)
-                .map(cleaner());
+                .map(retrieveCleaner());
     }
 
     /**
@@ -235,7 +235,11 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
         return Optional.empty();
     }
 
-    default Function<E, E> cleaner() {
+    default Function<E, E> retrieveCleaner() {
+        return it -> it;
+    }
+
+    default Function<E, E> persistCleaner() {
         return it -> it;
     }
 
