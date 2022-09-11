@@ -150,8 +150,9 @@ public interface JpaService<E extends Updatable<E>, I extends Serializable, P ex
 
     default Mono<E> persist(E e) {
         return Mono.fromCallable(() -> {
-            return getJpaRepository().save(e);
-        }).map(persistCleaner());
+                    return getJpaRepository().save(e);
+                })
+                .map(persistCleaner());
     }
 
     /**
